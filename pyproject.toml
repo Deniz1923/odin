@@ -1,0 +1,59 @@
+[project]
+name = "face-surveillance"
+version = "0.1.0"
+description = "Temporal face recognition and surveillance alerting"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "fastapi>=0.143.0",
+    "insightface==2.1",
+    "numpy>=2.5.4",
+    "onnx>=1.23.2",
+    "onnxruntime-gpu==1.31.0",
+    "opencv-python>=5.0.0.93",
+    "pydantic>=2.14.1",
+    "pydantic-settings>=2.15.0",
+    "python-multipart>=0.0.32",
+    "pyyaml>=6.0.3",
+    "scipy>=1.18.1",
+    "sqlalchemy>=2.1.4",
+    "torch==2.14.1",
+    "torchvision==0.29.1",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend/src/face_surveillance"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["backend/src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.uv]
+exclude-dependencies = ["onnxruntime"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.13.1",
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
