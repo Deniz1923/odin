@@ -1,6 +1,6 @@
 # odin: architecture, scope, and delivery plan
 
-Status: architecture with user-accepted planning defaults, 16 October 2026. Model feasibility and performance remain unmeasured. Repository inspection, existing checks, and documentation only were performed for this review; the original boundary against application changes, dependency changes and model downloads remains in place for this documentation task.
+Status: architecture with user-accepted planning defaults, 16 October 2026. The original documentation task was completed at `92a1354`. The user subsequently authorized model downloads/setup and implementation attempts. A headless real-model CUDA feasibility probe is now available; see [MODEL_FEASIBILITY.md](MODEL_FEASIBILITY.md) for measured results and limitations. This is not a working video recognition/alert application; the historical scaffold inspection below remains dated evidence, not a claim about the new probe.
 
 Project name: **odin**. Course project category: Face Recognition and Surveillance Alerting. Python package: `face_surveillance`. The user explicitly chose to retain odin as the project's own name; no repository/package rename is proposed.
 
@@ -706,4 +706,4 @@ Immediate actions after review:
 3. Plan M2's replay vertical slice and independent recordings from the established contracts. Keep webcam/basic UI/event integration ahead of optional temporal sophistication.
 4. Keep X1 multi-camera and X2 ensemble research as independent equal-priority options; choose either or both when prerequisites and capacity allow.
 
-The implementation handoff begins with **M1 model/data feasibility, then M2 reproducible recorded-video baseline**. No application feature, dependency replacement, weight download, scaffold change, or empty module creation is included in this architecture review.
+The implementation handoff begins with **M1 model/data feasibility, then M2 reproducible recorded-video baseline**. The architecture-only review stopped at `92a1354`; the user then authorized the feasibility work. Its headless probe and local weights are documented separately; core dependencies, original specification, API and frontend remain unchanged. M1's independent data protocol/recordings and the M2 video runner are not completed by a still-image probe.

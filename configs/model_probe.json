@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "purpose": "technical CUDA feasibility, not accuracy evaluation",
+  "assets": {
+    "detector": {
+      "path": "models/feasibility/det_10g.onnx",
+      "sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+      "bytes": 16923827,
+      "source": "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    },
+    "arcface": {
+      "path": "models/feasibility/w600k_r50.onnx",
+      "sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+      "bytes": 174383860,
+      "source": "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    },
+    "facenet": {
+      "path": "models/feasibility/20180402-114759-vggface2.pt",
+      "sha256": "281cebca8662831adb987a874bdcb36e73f5b1c6dc5ee5878f305e985625d99b",
+      "bytes": 111898327,
+      "source": "https://github.com/timesler/facenet-pytorch/releases/download/v2.2.9/20180402-114759-vggface2.pt"
+    },
+    "facenet_wheel": {
+      "path": "models/feasibility/facenet_pytorch-2.6.0-py3-none-any.whl",
+      "sha256": "ecb82b27beb226d106f2219efe8f829b01b87a8595badd01545679bdb9f19cca",
+      "bytes": 1881930,
+      "source": "https://files.pythonhosted.org/packages/ed/2e/2d56386bc2f834cdc683743903852cf1428b4e5ee119f16cf808b589d3cd/facenet_pytorch-2.6.0-py3-none-any.whl"
+    }
+  },
+  "overlay_path": "models/feasibility/python",
+  "overlay_files": {
+    "facenet_pytorch/__init__.py": "96df9b16b9d34c12f81db4b0d34258d878c862dabac4a25b6598ea9d76fe4a56",
+    "facenet_pytorch/data/onet.pt": "165bfbe42940416ccfb977545cf0e976d5bf321f67083ae2aaaa5c764280118d",
+    "facenet_pytorch/data/pnet.pt": "a2a71925e0b9996a42f63e47efc1ca19043e69558b5c523b978d611dfae49c8f",
+    "facenet_pytorch/data/rnet.pt": "bbb937de72efc9ef83b186c49f5f558467a1d7e3453a8ece0d71a886633f6a86",
+    "facenet_pytorch/models/inception_resnet_v1.py": "ed9ad5168bb45da68850a4e84667eb665226068a95ec9fdd03fb554850d7b749",
+    "facenet_pytorch/models/mtcnn.py": "29a965963337313068ab335cbc48f4a4facc2e5857756ef7b9ab11e5c1d6b620",
+    "facenet_pytorch/models/utils/detect_face.py": "7f6244c8118b9a19d0b6620e6dcb90625cced5b1eceed58d0d69303b5ccbab06",
+    "facenet_pytorch/models/utils/download.py": "0a15b353702bc77aca75a54e3e39a6674d80607fbf0b661b4a464ded26d88c59",
+    "facenet_pytorch/models/utils/tensorflow2pytorch.py": "1652bd759d7745880caa37ad39939627c67fbe6b2b97aa7f936022ab240402af",
+    "facenet_pytorch/models/utils/training.py": "0f931d22ff2658cd96386b1df831bc1562d119617dac009c234335cf61714d18"
+  },
+  "detector_input_size": [
+    640,
+    640
+  ],
+  "detector_smoke_threshold": 0.5,
+  "facenet_classes": 8631,
+  "licenses": {
+    "insightface_code": "MIT",
+    "insightface_weights": "Upstream general notice: non-commercial research only; no redistribution clearance assumed",
+    "insightface_notice": "https://github.com/deepinsight/insightface#license",
+    "facenet_code": "MIT",
+    "facenet_weights": "Separate checkpoint grant not established; VGGFace2-derived research artifact; no redistribution/commercial clearance",
+    "facenet_provenance": "https://github.com/davidsandberg/facenet#pre-trained-models"
+  },
+  "dependency_override": "Only facenet-pytorch wheel in local overlay; declared NumPy/Pillow/torch/torchvision ranges intentionally bypassed for encoder-only feasibility; not a supported production resolution",
+  "archive": {
+    "path": "models/feasibility/buffalo_l.zip",
+    "sha256": "80ffe37d8a5940d59a7384c201a2a38d4741f2f3c51eef46ebb28218a7b0ca2f"
+  },
+  "onnx_dimension_overrides": {
+    "detector": {
+      "?": 640
+    },
+    "arcface": {
+      "None": 1
+    }
+  }
+}
