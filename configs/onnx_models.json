@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "assets": {
+    "detector": {
+      "path": "models/feasibility/det_10g.onnx",
+      "sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+      "bytes": 16923827,
+      "source": "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    },
+    "arcface": {
+      "path": "models/feasibility/w600k_r50.onnx",
+      "sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+      "bytes": 174383860,
+      "source": "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    },
+    "facenet": {
+      "path": "models/facenet-onnx-v2/facenet_vggface2.onnx",
+      "sha256": "e5ab0c8e28c81bb6e9958d98dafd22cefb56d580b7c932a8da0782d21cbda5fb",
+      "bytes": 94637651,
+      "source": "Local verified export; source rights unchanged"
+    }
+  },
+  "onnx_dimension_overrides": {
+    "detector": {
+      "?": 640
+    },
+    "arcface": {
+      "None": 1
+    }
+  },
+  "facenet_preprocessing": "RGB float32 NCHW (x-127.5)/128, fixed 160x160, batch1",
+  "derived_from": {
+    "path": "models/feasibility/20180402-114759-vggface2.pt",
+    "sha256": "281cebca8662831adb987a874bdcb36e73f5b1c6dc5ee5878f305e985625d99b",
+    "bytes": 111898327,
+    "source": "https://github.com/timesler/facenet-pytorch/releases/download/v2.2.9/20180402-114759-vggface2.pt"
+  },
+  "validation": {
+    "report_path": "models/facenet-onnx-v2/export_report.json",
+    "report_sha256": "466b5bade7c3b9b7b9995d2ef047634f6eeed7d6104ff089fb69cbb8db9ee4ca"
+  }
+}

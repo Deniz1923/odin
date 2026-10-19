@@ -2,6 +2,8 @@
 
 16 October 2026. Scope: M1's technical model probe, not the recorded-video baseline or recognition evaluation.
 
+Update, 19 October: this document preserves the original PyTorch/overlay probe results. The current same-environment inference choice uses a verified FaceNet ONNX export, with no FaceNet package or exporter dependencies in routine inference. See [ENVIRONMENT.md](ENVIRONMENT.md) for the active setup and handoff.
+
 ## Result
 
 SCRFD-10GF, the `buffalo_l` ResNet50 ArcFace-family encoder, and the FaceNet-family VGGFace2 InceptionResnetV1 checkpoint execute on the existing RTX 4070 Laptop GPU. The core environment and `uv.lock` were not changed. FaceNet uses an explicitly experimental import overlay, not a supported dependency resolution.
