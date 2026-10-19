@@ -36,9 +36,7 @@ graph = onnx.helper.make_graph(
     inputs,
     [output],
 )
-model = onnx.helper.make_model(
-    graph, opset_imports=[onnx.helper.make_opsetid("", 17)]
-)
+model = onnx.helper.make_model(graph, opset_imports=[onnx.helper.make_opsetid("", 17)])
 model.ir_version = 9
 
 options = ort.SessionOptions()

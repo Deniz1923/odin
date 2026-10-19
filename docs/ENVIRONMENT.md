@@ -83,6 +83,28 @@ These are short, batch-one host-to-host timings with profiling enabled and TF32 
 
 A second fresh-process runtime run also passed, with exactly matching embeddings across the two processes. Final runtime source/helper/lock hashes and the export source hash were checked against the saved reports. The original PyTorch/ORT GPU matrix checks and all 35 tests in the default environment also pass. The upstream scikit-image alignment deprecation warning remains visible; installed library code was not patched or warning-suppressed.
 
+## CPU execution and device policy
+
+The same three ONNX model files also execute on `CPUExecutionProvider` in the installed `onnxruntime-gpu` distribution. A separate CPU-only ORT package, checkpoint conversion or retraining is unnecessary for this environment. Hardware selection belongs to session configuration; it does not change the recognition approach or embedding space. This was tested on this laptop, not a fresh CPU-only machine with different library provisioning.
+
+An explicit one-off CPU diagnostic on 19 October used the active hash-verified manifest, the same fixed dimension overrides and preprocessing, one intra/inter-op thread, and sessions with `providers=["CPUExecutionProvider"]` and `disable_fallback()`. Executed-node profiles contained only CPU events for all three models. The astronaut and blank fixtures returned one and zero faces. Both encoders produced finite normalized 512-element vectors. The local evidence is `runs/cpu-readiness-20261019T183413/report.json`; it is an ignored diagnostic artifact, not a committed fixture or reusable CPU CLI.
+
+| Stage | CPU median, five measured calls after warmup |
+|---|---:|
+| SCRFD, including adapter preprocessing/postprocessing | 225.19 ms |
+| ArcFace, prepared crop | 92.43 ms |
+| FaceNet ONNX, prepared input | 23.90 ms |
+
+Maximum normalized-component differences against saved CUDA outputs were `9.0711e-6` for ArcFace and `1.3970e-7` for FaceNet. This checks one fixture's numerical agreement, not identity accuracy or universal device equivalence. Short single-thread CPU timings are diagnostic observations, not a sustained benchmark, a CPU real-time promise or a controlled hardware speed comparison.
+
+The checked-in `onnx_probe` and `check_gpu.py` deliberately remain **CUDA-required**. They fail when CUDA is unavailable; neither command exposes an application CPU mode or silently falls back. For the future video runner, implement explicit `cuda-required` and `cpu` profiles, record the requested/actual provider, and calibrate/version the selected runtime configuration. A GPU failure should fail the session visibly; changing to CPU starts a new explicit session. CPU performance tuning and automatic failover are outside this preparation task.
+
+## Final integration verification
+
+Before merging, the full default-environment suite passed **35 tests**, backend/script lint and formatting passed, the lockfile passed offline validation, and the unchanged frontend passed lint and production build. A fresh CUDA matrix check and shared-model run passed; `runs/shared-onnx-final-merge/report.json` records exclusively CUDA node execution for detector/ArcFace/FaceNet and no export-only imports. Its median stage timings were 8.79/3.46/11.03 ms under the same short-probe limitations above. The only GPU-script edit during finalization was Ruff formatting; its behavior is unchanged.
+
+The preparation gate is complete for local execution/export compatibility. Weight-usage provenance limitations, independent study data, identity calibration and video performance remain separate unresolved project gates. No application capability is inferred from the passing tests.
+
 ## Architecture boundary for the team's next implementation
 
 - Treat `configs/onnx_models.json` as the hash-pinned local model bundle definition, preserving model-space/preprocessing identifiers when enrollment is implemented.
