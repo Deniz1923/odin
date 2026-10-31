@@ -11,11 +11,15 @@ From this directory, using the existing Python 3.14 / Node 26 setup:
 
 ```bash
 uv sync --locked
-.venv/bin/python scripts/acquire_haar.py
+uv run --locked python scripts/acquire_haar.py
 npm --prefix frontend ci
 npm --prefix frontend run build
-PYTHONPATH=backend/src .venv/bin/python -m uvicorn face_surveillance.api.main:app --host 127.0.0.1 --port 8000
+uv run --locked python -m uvicorn face_surveillance.api.main:app --host 127.0.0.1 --port 8000
 ```
+
+Python dependencies and the editable project are installed by `uv sync --locked`;
+no manual wheel downloads or `PYTHONPATH` override are needed. For a setup check,
+`uv sync --locked --dry-run` should report that it would make no changes.
 
 Open **http://127.0.0.1:8000**. Use one Uvicorn worker; no reload while a camera is
 active. The Haar XML is already prepared in this workspace; acquisition is explicit,
@@ -64,10 +68,10 @@ relative to the manifest. Use separate capture sessions for enrollment, validati
 and test; unknown test identities stay outside enrollment and validation.
 
 ```bash
-PYTHONPATH=backend/src .venv/bin/python -m face_surveillance.classical.evaluate \
+uv run --locked python -m face_surveillance.classical.evaluate \
   --manifest experiments/my-validation.json --output runs/lbp-validation-01 --calibrate
 
-PYTHONPATH=backend/src .venv/bin/python -m face_surveillance.classical.evaluate \
+uv run --locked python -m face_surveillance.classical.evaluate \
   --manifest experiments/my-test.json --output runs/lbp-test-01
 ```
 
@@ -94,13 +98,13 @@ unknown-person robustness or independent research exposure.
 ## Checks and learning
 
 ```bash
-PYTHONPATH=backend/src .venv/bin/python -m pytest -q
-.venv/bin/ruff check backend tests scripts
-.venv/bin/ruff format --check backend tests scripts
+uv run --locked pytest -q
+uv run --locked ruff check backend tests scripts
+uv run --locked ruff format --check backend tests scripts
 npm --prefix frontend run lint
 npm --prefix frontend run build
-PYTHONPATH=backend/src .venv/bin/python scripts/classical_smoke.py --output runs/classical-smoke-new
-PYTHONPATH=backend/src .venv/bin/python scripts/check_vision_cpu.py --output runs/cpu-regression-new
+uv run --locked python scripts/classical_smoke.py --output runs/classical-smoke-new
+uv run --locked python scripts/check_vision_cpu.py --output runs/cpu-regression-new
 ```
 
 The neural-model regression needs the previously prepared local model bundle. Its

@@ -90,3 +90,8 @@ Files: React App/CSS, `classical/evaluate.py`, README and tutorial; evaluation t
   acquired with curl, checked against lock hashes and installed locally; offline
   uv lock validation passes. A fresh normal uv sync still needs network/cached wheels.
 - Integration: retain the feature branch; no merge or remote push was requested.
+
+- Follow-up environment repair: after permission changes, normal `uv sync --locked`
+  rebuilt editable metadata and replaced all four local-wheel installs with registry
+  installs at identical locked versions. A second sync reports no changes. README
+  commands now use native uv execution without PYTHONPATH or manual wheel steps.

@@ -1,5 +1,13 @@
 # Shared model runtime: environment and handoff
 
+Update 31 October (environment cleanup): a normal `uv sync --locked` completed
+with approved network/cache access. It rebuilt the editable project and replaced
+the four temporary-wheel installations with registry installations of the exact
+locked versions. The installed project metadata now includes contrib OpenCV and
+cryptography; no deleted `/tmp` wheel paths remain in those distributions. A second
+locked sync reports no changes. Python setup and execution use the standard `uv`
+commands in the README. The earlier sandbox download workaround is no longer needed.
+
 Update 31 October: the classical application uses `opencv-contrib-python==5.0.0.93`
 in place of `opencv-python`, enabling Haar detection under OpenCV 5. Both distributions
 share `cv2`; transitive `opencv-python` is excluded just as CPU `onnxruntime` is excluded.
