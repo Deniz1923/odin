@@ -124,7 +124,7 @@ def _execute(manifest, paths, output, report, repeats):
                 "onnxruntime-gpu",
                 "insightface",
                 "numpy",
-                "opencv-python",
+                "opencv-contrib-python",
                 "Pillow",
             )
         },

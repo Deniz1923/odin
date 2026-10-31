@@ -1,5 +1,12 @@
 # odin: architecture, scope, and delivery plan
 
+**31 October implementation update:** the first classical application now uses Haar
+detection and our NumPy LBPH recognizer, with enrollment, video/replay, basic spatial
+tracking, temporal confirmation, persisted events, local UI, privacy controls and
+offline evaluation. See [README](../README.md) and [classical walkthrough](CLASSICAL_PIPELINE.md).
+The dated state assessments below describe the earlier neural preparation milestone;
+the larger motion-tracking, event-video, fusion and multi-camera design remains future work.
+
 Status: architecture with user-accepted planning defaults, updated 19 October 2026. The original documentation task was completed at `92a1354`; the user then authorized model/environment preparation, explicitly stopping before recorded-video implementation. Real-model CUDA checks and a numerically verified FaceNet ONNX export now support a shared inference environment; see [ENVIRONMENT.md](ENVIRONMENT.md) for the current setup and [MODEL_FEASIBILITY.md](MODEL_FEASIBILITY.md) for the original probe. This is not a working video recognition/alert application; historical scaffold inspection below remains dated evidence.
 
 Project name: **odin**. Course project category: Face Recognition and Surveillance Alerting. Python package: `face_surveillance`. The user explicitly chose to retain odin as the project's own name; no repository/package rename is proposed.

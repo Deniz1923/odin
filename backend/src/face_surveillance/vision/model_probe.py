@@ -158,7 +158,7 @@ def _execute_probe(manifest, paths, overlay, output, report, repeats):
                 "onnxruntime-gpu",
                 "insightface",
                 "numpy",
-                "opencv-python",
+                "opencv-contrib-python",
                 "Pillow",
                 "scikit-image",
                 "facenet-pytorch",

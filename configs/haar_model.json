@@ -1,0 +1,7 @@
+{
+  "path": "models/classical/haarcascade_frontalface_default.xml",
+  "sha256": "0f7d4527844eb514d4a4948e822da90fbb16a34a0bbbbc6adc6498747a5aafb0",
+  "source": "https://raw.githubusercontent.com/opencv/opencv/4.12.0/data/haarcascades/haarcascade_frontalface_default.xml",
+  "license": "Intel Open Source Computer Vision license; embedded in XML header",
+  "upstream_revision": "4.12.0"
+}

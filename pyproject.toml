@@ -9,7 +9,8 @@ dependencies = [
     "numpy>=2.5.4",
     "onnx>=1.23.2",
     "onnxruntime-gpu==1.31.0",
-    "opencv-python>=5.0.0.93",
+    "opencv-contrib-python==5.0.0.93",
+    "cryptography>=46",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.15.0",
     "python-multipart>=0.0.32",
@@ -40,7 +41,7 @@ select = ["E", "F", "I"]
 testpaths = ["tests"]
 
 [tool.uv]
-exclude-dependencies = ["onnxruntime"]
+exclude-dependencies = ["onnxruntime", "opencv-python"]
 
 [tool.uv.sources]
 torch = { index = "pytorch-cu130" }

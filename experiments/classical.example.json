@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "split": "validation",
+  "policy": { "threshold": 0.35, "margin": 0.02 },
+  "enrollment": [
+    {
+      "person_id": "p01",
+      "authorized": true,
+      "alert_enabled": true,
+      "images": ["../data/study/p01-reference-1.jpg", "../data/study/p01-reference-2.jpg"]
+    }
+  ],
+  "videos": [
+    {
+      "path": "../data/study/validation-frontal.avi",
+      "condition": "frontal",
+      "annotations": [
+        { "frame": 0, "faces": [{ "person_id": "p01", "bbox": [100, 80, 120, 120] }] },
+        { "frame": 30, "faces": [{ "person_id": null, "bbox": [300, 80, 120, 120] }] },
+        { "frame": 60, "faces": [] }
+      ],
+      "encounters": [{ "person_id": "p01", "start": 0.0, "end": 0.9 }]
+    }
+  ]
+}

@@ -1,5 +1,16 @@
 # Shared model runtime: environment and handoff
 
+Update 31 October: the classical application uses `opencv-contrib-python==5.0.0.93`
+in place of `opencv-python`, enabling Haar detection under OpenCV 5. Both distributions
+share `cv2`; transitive `opencv-python` is excluded just as CPU `onnxruntime` is excluded.
+Existing locked package versions were preserved. `cryptography` and its CFFI/parser
+dependencies were added for encrypted classical templates. Existing probes now report
+the contrib distribution's version. A fresh CPU regression of SCRFD/ArcFace/FaceNet
+and the generated classical replay are documented in the project README. This host
+does not expose a working GPU driver or webcam, so fresh GPU/live-camera verification
+remains a hardware check on the operator's machine. Dated GPU measurements below
+are historical evidence, not new measurements after this change.
+
 Verified 19 October 2026. odin is ready for the team to begin the recorded-video baseline. This preparation does not implement video capture, gallery enrollment/matching, tracking, temporal recognition, alerts or UI workflows.
 
 ## Decision and result
