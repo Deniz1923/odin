@@ -5,6 +5,12 @@ pretrained Haar face detection and **our own NumPy implementation of LBP, spatia
 histograms and chi-square matching**. Existing SCRFD/ArcFace/FaceNet preparation
 tools remain available for later comparisons; they do not run in the classical app.
 
+## Start here as a teammate
+
+Read the [project review and study guide](docs/PROJECT_REVIEW_AND_STUDY_GUIDE.md)
+for the current status, concepts, code map, evidence, and decisions for the next stage.
+Then follow the [classical walkthrough](docs/CLASSICAL_PIPELINE.md) while reading the code.
+
 ## Run the operator application
 
 From this directory, using the existing Python 3.14 / Node 26 setup:
@@ -110,7 +116,9 @@ uv run --locked python scripts/check_vision_cpu.py --output runs/cpu-regression-
 The neural-model regression needs the previously prepared local model bundle. Its
 CPU mode is explicit; original CUDA probes remain strict and require a working GPU.
 
-Read [the classical walkthrough](docs/CLASSICAL_PIPELINE.md) to understand the code.
+Use the [shared study guide](docs/PROJECT_REVIEW_AND_STUDY_GUIDE.md) for the learning
+route and upcoming work, and [the classical walkthrough](docs/CLASSICAL_PIPELINE.md)
+to understand the implemented algorithm.
 The older [architecture](docs/ARCHITECTURE.md) describes the larger future system;
 not every proposed feature is implemented. Fusion and multi-camera operation remain
 future work. A third recognizer is useful as a baseline even if fusion gains nothing.
