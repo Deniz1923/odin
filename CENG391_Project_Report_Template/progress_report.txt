@@ -1,0 +1,45 @@
+Project Progress Report
+Due November 20, 2026 11:59 PM
+•
+Multiple submissions allowed
+Instructions
+Each project group is required to submit a Progress Report using the provided CENG391_Project_Report_Template in the files.
+The report should clearly demonstrate your project's current progress, including the methodology, implementation activities, preliminary results, and planned work.
+
+
+Report Requirements
+
+Your report should include:
+
+Problem Definition and Dataset: Briefly describe the problem, project objectives, selected dataset, and any preprocessing performed.
+
+Methodology and Implementation: Explain the methods, algorithms, and models selected for your project. Describe the implementation work completed so far.
+
+Preliminary Results: Present your current experimental results, observations, and evaluations, where available. Include relevant figures, tables, or visualizations.
+
+Gantt Chart and Task Assignments (Mandatory): Include a detailed Gantt chart illustrating your project timeline. The chart must clearly specify:
+
+Individual tasks and their planned start and end dates.
+
+The student(s) responsible for each task, identified by name.
+
+The current status or completion percentage of each task.
+
+Completed, ongoing, and upcoming activities.
+
+Team Contributions: Clearly explain each group member's individual responsibilities and contributions to the project so far.
+
+Challenges and Next Steps: Discuss any technical difficulties encountered and outline your planned activities for the remaining weeks.
+
+Important Notes
+
+Follow the structure and formatting guidelines in the provided report template.
+
+The Gantt chart must reflect the actual division of responsibilities among group members.
+
+Clearly distinguish between completed work and activities that are still planned.
+
+Each group should submit one report in PDF format, stating the group ID like G11.pdf.
+
+The GenAI Usage Policy outlined in the course syllabus applies to this homework. AI tools may support your learning but must not replace your own work. You must be able to explain and reproduce everything you submit. If you use any GenAI tool, you must disclose its name with explicit version and briefly explain how it was used in your submission. Undisclosed or unauthorized AI-generated work may constitute an academic integrity violation.
+

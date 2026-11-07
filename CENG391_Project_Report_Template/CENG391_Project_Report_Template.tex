@@ -1,0 +1,91 @@
+\documentclass[14pt]{article}
+
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{gensymb}
+\usepackage{array}
+\usepackage{float}
+\usepackage{indentfirst}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\usepackage{booktabs, makecell}
+\usepackage{diagbox}
+\floatstyle{plaintop}
+\restylefloat{table}
+\usepackage{natbib}
+
+\topmargin      0.0in
+\headheight     0.0in
+\headsep        0.0in
+\oddsidemargin  0.0in
+\evensidemargin 0.0in
+\textheight     9.0in
+\textwidth      6.5in
+
+\title{{\bf CENG391 Introduction to Image Understanding \\ Term Project Report \\ 2026--2027 Fall Semester} \\
+\it Project Title: Title of the Project}
+
+\date{\today}
+
+\begin{document}
+
+\pagestyle{plain}
+\pagenumbering{roman}
+\maketitle
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{iyte_logo}
+\end{figure}
+
+\textbf{Group Members}
+\begin{itemize}
+    \item Student\_1 Full Name \& Student ID
+    \item Student\_2 Full Name \& Student ID
+    \item Student\_3 Full Name \& Student ID
+    \item Student\_4 Full Name \& Student ID
+    \item Student\_5 Full Name \& Student ID
+\end{itemize}
+
+\cleardoublepage
+\pagenumbering{arabic}
+
+\begin{abstract}
+Provide a concise summary of the project problem, motivation, dataset or input data, proposed methodology, main experiments, key quantitative and/or qualitative results, and the main conclusion. The abstract should normally be a single paragraph and should not exceed approximately 250 words.
+\end{abstract}
+
+\section{Introduction}
+Introduce the problem addressed by the project, explain its motivation and relevance to image understanding/computer vision, and clearly state the project aim and objectives. Briefly summarize the proposed approach and the main contributions of the project.
+
+\section{Related Work}
+Review and briefly explain the most relevant studies, methods, or systems related to your project. Compare their strengths and limitations and clarify how your proposed approach differs from or builds upon previous work.
+
+Cite related studies using BibTeX entries stored in the \texttt{literature.bib} file. BibTeX entries can typically be obtained from academic databases such as Google Scholar.
+
+Example citations: \cite{corke2011robotics} introduce an approach, while \cite{mahonyKC12} propose another method.
+
+\section{Dataset and Problem Definition}
+Describe the dataset or image/video source used in the project. Explain the classes, labels, number of samples, train/validation/test organization where applicable, preprocessing steps, augmentation, and any relevant data limitations. Clearly define the computer-vision task to be solved (e.g., classification, detection, segmentation, tracking, recognition, or depth estimation).
+
+\section{Methodology}
+Describe the proposed methodology step by step. Explain the image-processing and/or computer-vision techniques, models, algorithms, system components, training procedure, hyperparameters, and implementation details required to reproduce the work. Include figures, workflow diagrams, or equations where they improve clarity.
+
+\section{Experiments and Results}
+Describe the experimental setup and evaluation protocol. Report the selected evaluation metrics and present the quantitative and qualitative results using appropriate tables and figures. Compare alternative methods, models, parameter settings, or baselines where applicable.
+
+\section{Discussion}
+Interpret the obtained results rather than only repeating them. Discuss why the method performs as observed, important success and failure cases, limitations, computational considerations, and any threats to the validity or generalizability of the results.
+
+\section{Conclusion and Future Work}
+Summarize the problem, proposed approach, most important findings, and whether the project objectives were achieved. Briefly identify realistic improvements or extensions that could be investigated in future work.
+
+\section{Team Contributions}
+Briefly state the main contribution of each group member to the project, including tasks such as literature review, data preparation, implementation, model development, experiments, evaluation, report preparation, and presentation preparation.
+
+\bibliographystyle{chicago}
+\bibliography{literature}
+
+\end{document}
