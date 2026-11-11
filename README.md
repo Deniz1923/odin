@@ -7,9 +7,15 @@ tools remain available for later comparisons; they do not run in the classical a
 
 ## Start here as a teammate
 
-Read the [project review and study guide](docs/PROJECT_REVIEW_AND_STUDY_GUIDE.md)
-for the current status, concepts, code map, evidence, and decisions for the next stage.
-Then follow the [classical walkthrough](docs/CLASSICAL_PIPELINE.md) while reading the code.
+| Document | Purpose |
+|---|---|
+| [Project status](docs/PROJECT_STATUS.md) | Course coverage, preliminary evidence, eight-week scope and progress-report checklist |
+| [Study guide](docs/PROJECT_REVIEW_AND_STUDY_GUIDE.md) | Reading route and concepts to explain |
+| [Classical walkthrough](docs/CLASSICAL_PIPELINE.md) | Implemented recognition algorithm |
+| [Architecture](docs/ARCHITECTURE.md) | Current components, concurrency and data lifecycle |
+| [Evaluation](docs/EVALUATION.md) | Study splits, calibration, metrics and claim limits |
+| [Environment](docs/ENVIRONMENT.md) | Locked stack, neural assets, export and device checks |
+| [Archive](docs/archive/README.md) | Superseded plans and dated preparation results |
 
 ## Run the operator application
 
@@ -28,7 +34,7 @@ no manual wheel downloads or `PYTHONPATH` override are needed. For a setup check
 `uv sync --locked --dry-run` should report that it would make no changes.
 
 Open **http://127.0.0.1:8000**. Use one Uvicorn worker; no reload while a camera is
-active. The Haar XML is already prepared in this workspace; acquisition is explicit,
+active. The Haar XML is a local asset; acquisition is explicit,
 hash checked and never happens at API startup. Its upstream license is embedded in
 the XML. No other model download is needed for the classical app.
 
@@ -116,9 +122,6 @@ uv run --locked python scripts/check_vision_cpu.py --output runs/cpu-regression-
 The neural-model regression needs the previously prepared local model bundle. Its
 CPU mode is explicit; original CUDA probes remain strict and require a working GPU.
 
-Use the [shared study guide](docs/PROJECT_REVIEW_AND_STUDY_GUIDE.md) for the learning
-route and upcoming work, and [the classical walkthrough](docs/CLASSICAL_PIPELINE.md)
-to understand the implemented algorithm.
-The older [architecture](docs/ARCHITECTURE.md) describes the larger future system;
-not every proposed feature is implemented. Fusion and multi-camera operation remain
-future work. A third recognizer is useful as a baseline even if fusion gains nothing.
+See [project status](docs/PROJECT_STATUS.md) for completed checks, remaining work and
+the progress-report checklist. Historical plans and measurements are indexed in
+the [archive](docs/archive/README.md).

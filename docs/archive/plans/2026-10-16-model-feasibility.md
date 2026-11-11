@@ -1,3 +1,7 @@
+> Historical record archived on 11 November 2026. Claims and instructions below
+> describe their original milestone. Use [current status](../../PROJECT_STATUS.md) for active scope
+> and progress; the current project horizon is approximately eight weeks.
+
 # Model feasibility implementation plan
 
 > **For agentic workers:** Use superpowers:executing-plans to implement this bounded probe inline. Steps use checkboxes for progress.

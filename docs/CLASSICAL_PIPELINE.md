@@ -29,6 +29,12 @@ reference descriptors; it does not train a neural model.
 
 ## LBP by hand
 
+Before LBP, `prepare_face` clips the detected box to the image, requires at least
+40 pixels in each face dimension, and resizes its grayscale crop to 128×128.
+It rejects mean intensity outside 25–230 and Laplacian variance below 30, then
+equalizes the histogram. This is box preparation, not landmark alignment. These
+are engineering quality gates, not calibrated quality probabilities or mask detection.
+
 Take this patch; the center intensity is five:
 
 ```text
@@ -71,9 +77,9 @@ distributions and requires rechecking the threshold.
 
 `Pipeline` uses box intersection-over-union for a deliberately basic spatial tracker.
 Each detection can match at most one track. Ambiguous association resets all involved
-evidence; missed tracks expire after a bounded interval. This is less capable than
-the larger architecture's proposed motion tracker, especially for fast motion and
-crossings, and should be replaced or extended if measured failures justify it.
+evidence; missed tracks expire after a bounded interval. Fast motion and crossings
+can break spatial continuity; a stronger motion tracker should be considered if
+measured failures justify it. A track ID is a temporary trajectory, not a person ID.
 
 Positive observations are sampled at least 0.25 seconds apart. The default requires
 three accepted observations spanning at least 0.5 seconds inside a two-second window.
@@ -117,3 +123,6 @@ The next useful learning exercise is to enroll your own authorized samples, insp
 distance changes on a separate recording, and trace one accepted, one rejected and
 one insufficient observation through the functions above. Then collect the independent
 sessions needed to compare methods and report difficult-condition results honestly.
+
+See [evaluation](EVALUATION.md) for the independent study protocol and
+[project status](PROJECT_STATUS.md) for completed evidence and remaining tasks.

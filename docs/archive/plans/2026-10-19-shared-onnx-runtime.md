@@ -1,3 +1,7 @@
+> Historical record archived on 11 November 2026. Claims and instructions below
+> describe their original milestone. Use [current status](../../PROJECT_STATUS.md) for active scope
+> and progress; the current project horizon is approximately eight weeks.
+
 # Shared ONNX runtime environment plan
 
 > **For agentic workers:** Use superpowers:executing-plans inline. The user explicitly authorized architecture/environment work through, but excluding, recorded-video recognition implementation.

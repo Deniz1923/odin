@@ -1,8 +1,12 @@
+> Historical record archived on 11 November 2026. Claims and instructions below
+> describe their original milestone. Use [current status](../PROJECT_STATUS.md) for active scope
+> and progress; the current project horizon is approximately eight weeks.
+
 # Pretrained-model feasibility
 
 16 October 2026. Scope: M1's technical model probe, not the recorded-video baseline or recognition evaluation.
 
-Update, 19 October: this document preserves the original PyTorch/overlay probe results. The current same-environment inference choice uses a verified FaceNet ONNX export, with no FaceNet package or exporter dependencies in routine inference. See [ENVIRONMENT.md](ENVIRONMENT.md) for the active setup and handoff.
+Update, 19 October: this document preserves the original PyTorch/overlay probe results. The current same-environment inference choice uses a verified FaceNet ONNX export, with no FaceNet package or exporter dependencies in routine inference. See [ENVIRONMENT.md](2026-10-31-model-environment-handoff.md) for the active setup and handoff.
 
 ## Result
 

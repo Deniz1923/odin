@@ -1,60 +1,119 @@
-# Shared model runtime: environment and handoff
+# odin: environment and model reproduction
 
-Update 31 October (environment cleanup): a normal `uv sync --locked` completed
-with approved network/cache access. It rebuilt the editable project and replaced
-the four temporary-wheel installations with registry installations of the exact
-locked versions. The installed project metadata now includes contrib OpenCV and
-cryptography; no deleted `/tmp` wheel paths remain in those distributions. A second
-locked sync reports no changes. Python setup and execution use the standard `uv`
-commands in the README. The earlier sandbox download workaround is no longer needed.
+Updated 11 November 2026. Run commands from the repository root. The
+[README](../README.md) owns normal application installation, operation and checks.
+This guide adds neural-model preparation; neural inference is not integrated into
+the classical operator app. See [project status](PROJECT_STATUS.md) for evidence.
 
-Update 31 October: the classical application uses `opencv-contrib-python==5.0.0.93`
-in place of `opencv-python`, enabling Haar detection under OpenCV 5. Both distributions
-share `cv2`; transitive `opencv-python` is excluded just as CPU `onnxruntime` is excluded.
-Existing locked package versions were preserved. `cryptography` and its CFFI/parser
-dependencies were added for encrypted classical templates. Existing probes now report
-the contrib distribution's version. A fresh CPU regression of SCRFD/ArcFace/FaceNet
-and the generated classical replay are documented in the project README. This host
-does not expose a working GPU driver or webcam, so fresh GPU/live-camera verification
-remains a hardware check on the operator's machine. Dated GPU measurements below
-are historical evidence, not new measurements after this change.
+## Locked environment
 
-Verified 19 October 2026. odin is ready for the team to begin the recorded-video baseline. This preparation does not implement video capture, gallery enrollment/matching, tracking, temporal recognition, alerts or UI workflows.
+Use Python 3.14 and Node 26 as pinned in `.python-version` and `.nvmrc`, with
+`uv.lock` and the frontend npm lockfile. Normal `uv sync --locked` installs the
+editable backend; no manual wheel installation or `PYTHONPATH` override is needed.
 
-## Decision and result
+- `opencv-contrib-python==5.0.0.93` supplies `cv2` and Haar support. Do not install
+  `opencv-python` alongside it; the transitive main distribution is excluded.
+- `onnxruntime-gpu==1.31.0` supplies CPU and CUDA session providers in the tested
+  environment. The separate CPU-only `onnxruntime` distribution is excluded.
+- PyTorch/torchvision use the explicit cu130 index. PyTorch remains for reference,
+  export, GPU checks and CUDA-library provisioning even for ONNX-only inference.
+- `facenet-pytorch` is not a normal dependency. Its source overlay is used only for
+  reference/export. The locked `model-export` group adds ONNX Script and ONNX IR.
 
-Use ONNX Runtime CUDA for the pinned SCRFD detector, ArcFace-family encoder and **verified FaceNet-family ONNX export** in the same Python environment/process. FaceNet's incompatible Python package is not a normal runtime dependency. Existing Python/PyTorch/torchvision/NumPy/Pillow/ORT versions were preserved; no downgrade was needed.
+These are repository pins, not claims of latest versions or portability to every
+machine. A fresh CPU-only machine's library provisioning and live hardware performance
+still require verification. Preserve the working stack when preparing FaceNet.
 
-PyTorch remains installed for export/reference experiments, existing GPU checks and CUDA-library provisioning. This does not imply a PyTorch model runs during normal ONNX inference. Removing it would require separately validating library provisioning; no such change was needed here.
+## Classical model
 
-Default setup:
+`uv run --locked python scripts/acquire_haar.py` explicitly downloads and verifies
+the XML described in [haar_model.json](../configs/haar_model.json). No model is
+downloaded at API startup. Its Intel/OpenCV license is embedded in the XML.
+No neural model is needed to run the classical application.
+
+## Neural assets
+
+[model_probe.json](../configs/model_probe.json) pins source checkpoint/archive/wheel
+hashes, overlay files, URLs and provenance. [onnx_models.json](../configs/onnx_models.json)
+selects the active SCRFD/ArcFace/FaceNet ONNX bundle and finalized export-report hash.
+Paths are repository-relative. Assets and generated runs stay in ignored local storage;
+cloning does not acquire them. Hashes identify bytes, not recognition accuracy or an
+independent signature of trust. Check the provenance limits below before acquisition.
+
+## Acquire source assets for a new neural bundle
+
+Existing verified bundles can be checked directly. Source acquisition and export
+are needed when regenerating one; use the exact manifest pins.
+
+Acquire the exact upstream artifacts, preserving filenames:
 
 ```bash
-uv sync --locked
-.venv/bin/python scripts/check_gpu.py
-.venv/bin/pytest -q
-.venv/bin/ruff check backend tests scripts
+mkdir -p models/feasibility
+curl -L --fail -o models/feasibility/buffalo_l.zip \
+  https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+curl -L --fail -o models/feasibility/20180402-114759-vggface2.pt \
+  https://github.com/timesler/facenet-pytorch/releases/download/v2.2.9/20180402-114759-vggface2.pt
+curl -L --fail -o models/feasibility/facenet_pytorch-2.6.0-py3-none-any.whl \
+  https://files.pythonhosted.org/packages/ed/2e/2d56386bc2f834cdc683743903852cf1428b4e5ee119f16cf808b589d3cd/facenet_pytorch-2.6.0-py3-none-any.whl
 ```
 
-Model files are local, ignored assets. Before the first export, prepare the exact sources/overlay described in [MODEL_FEASIBILITY.md](MODEL_FEASIBILITY.md#acquisition-and-reproducibility). The earlier overlay probe remains a historical reference; use the ONNX probe below for the shared runtime.
+Before extraction/install, verify hashes against the checked-in manifest. Extract **only** `det_10g.onnx` and `w600k_r50.onnx`; unrelated age/gender/extra-landmark models are not loaded:
 
-## Export once, validate, then activate
+```bash
+uv run --locked python - <<'PY'
+import json
+import zipfile
+from pathlib import Path
+from face_surveillance.vision.model_probe import verify_artifact
+
+manifest = json.loads(Path("configs/model_probe.json").read_text())
+for asset in (manifest["archive"], manifest["assets"]["facenet"],
+              manifest["assets"]["facenet_wheel"]):
+    verify_artifact(Path(asset["path"]), asset["sha256"])
+with zipfile.ZipFile(manifest["archive"]["path"]) as archive:
+    for key in ("detector", "arcface"):
+        asset = manifest["assets"][key]
+        path = Path(asset["path"])
+        path.write_bytes(archive.read(path.name))
+        verify_artifact(path, asset["sha256"])
+PY
+
+uv pip install --no-index --no-deps \
+  --target models/feasibility/python \
+  models/feasibility/facenet_pytorch-2.6.0-py3-none-any.whl
+```
+
+### Isolated reference/export overlay
+
+The 2.6.0 wheel declares NumPy `<2`, Pillow `<10.3`, torch `<2.3` and torchvision
+`<0.18`. Installing only this hash-checked wheel into an ignored `--target` directory
+deliberately bypasses those constraints for encoder reference/export. The tools
+verify its source/data hashes before loading; normal API imports cannot see it.
+This does not certify MTCNN, training or the full package. Keep the overlay out of
+normal dependencies; use the verified ONNX conversion for inference. Historical
+compatibility observations and acquisition provenance remain in the archive.
+
+## Export, validate, activate
+
+Export requires accessible CUDA for reference/parity validation. Use a new output
+directory inside the repository's ignored `models/` area. Activation is an
+intentional tracked config change; this documentation cleanup does not perform it.
 
 Export tools are isolated as a dependency **group** within the same environment, not installed for default inference:
 
 ```bash
 uv sync --locked --group model-export
-.venv/bin/python -m face_surveillance.vision.export_facenet \
+uv run --locked --group model-export python -m face_surveillance.vision.export_facenet \
   --manifest configs/model_probe.json \
-  --output models/facenet-onnx-v2
+  --output models/facenet-onnx-new
 ```
 
 Use a new directory if that output already exists. Only after success, activate its generated manifest:
 
 ```bash
-cp models/facenet-onnx-v2/runtime_manifest.json configs/onnx_models.json
+cp models/facenet-onnx-new/runtime_manifest.json configs/onnx_models.json
 uv sync --locked
-.venv/bin/python -m face_surveillance.vision.onnx_probe \
+uv run --locked python -m face_surveillance.vision.onnx_probe \
   --manifest configs/onnx_models.json \
   --output runs/shared-onnx-runtime-new
 ```
@@ -63,73 +122,77 @@ Use a new run directory. The runtime checks all model hashes and the finalized e
 
 `export_facenet` requires the hash-pinned FaceNet source overlay only to instantiate the original architecture. It explicitly loads the local state dict with `weights_only=True` and strict keys, exports with modern `torch.onnx.export(dynamo=True)`, and validates the resulting graph and CUDA outputs. It never downloads a checkpoint. Failed export/parity produces a failure report and no runtime manifest.
 
-The export group adds `onnxscript==0.7.2` and its locked `onnx-ir==1.0.0` dependency. Default `uv sync --locked` omits/removes both. The first exact sync also removed eight previously installed but **unlocked** plotting dependencies (matplotlib, contourpy, cycler, fonttools, kiwisolver, pyparsing, python-dateutil, six); none is required by the locked core or these probes. No existing locked package version changed. No FaceNet distribution was installed into the default environment.
+The export group adds `onnxscript==0.7.2` and locked `onnx-ir==1.0.0`.
+Default `uv sync --locked` omits/removes them; normal ONNX inference needs neither
+these libraries nor the source overlay. Regenerated bundles retain the source's
+usage restrictions and are not new independently trained recognition methods.
 
-## Numerical equivalence gates and evidence
+## Preprocessing and verification contracts
 
-Export input ABI: float32 `[1, 3, 160, 160]`, RGB, `(pixel - 127.5) / 128`, prepared by the same `facenet_input` helper as the reference. Output: float32 `[1, 512]` normalized embedding. Fixed batch one, ONNX opset18, embedded weights, TF32 disabled during parity and runtime checks. No image preprocessing is embedded in the ONNX graph; callers must apply this exact external contract.
+| Model | Input contract |
+|---|---|
+| SCRFD-10GF | InsightFace BGR detector adapter, pinned 640×640 profile; symbolic `?` dimensions fixed to 640 |
+| ArcFace-family ResNet50 | Five-landmark alignment to 112×112, adapter RGB/NCHW normalization `(x-127.5)/127.5`; symbolic batch `None` fixed to one |
+| FaceNet-family InceptionResnetV1 | Box RGB crop, PIL bilinear resize to 160×160; float32 `[1,3,160,160]`, `(x-127.5)/128` |
 
-Before export we fixed these acceptance gates: every raw output finite and unit norm within `1e-4`; each output component agrees with the PyTorch reference at `atol=1e-5, rtol=1e-4`; pairwise cosine-score matrix maximum absolute difference at most `1e-5`. We do not normalize away invalid/scaled outputs before checking them.
+Both encoders produce 512 values in separate spaces. FaceNet preprocessing is
+external to the ONNX graph; output shape is `[1,512]`. Crop conventions differ, so
+this is not a controlled loss-only comparison. New shapes/preprocessing need
+explicit compatibility verification and threshold recalibration.
 
-Both completed exports produced identical ONNX bytes:
+FaceNet export uses opset 18, embedded weights, fixed batch one and TF32 disabled.
+Eleven face-variant/synthetic inputs check finite raw outputs, unit norm within
+`1e-4`, per-component agreement at `atol=1e-5, rtol=1e-4`, and pairwise cosine-matrix
+difference at most `1e-5`. Normalization cannot hide invalid/scaled raw outputs.
+These gates check numerical conversion, not participant recognition or mask robustness.
 
-```text
-SHA-256: e5ab0c8e28c81bb6e9958d98dafd22cefb56d580b7c932a8da0782d21cbda5fb
-Bytes:   94637651
-Source checkpoint SHA-256:
-281cebca8662831adb987a874bdcb36e73f5b1c6dc5ee5878f305e985625d99b
+SCRFD's dimension overrides eliminate CPU shape-subgraph placement for the pinned
+square CUDA profile; weights remain unchanged. Required-CUDA checks disable CPU
+fallback and inspect executed-node profiles, not merely available provider names.
+The shared ONNX checker blocks `facenet_pytorch`, `onnxscript`, and `onnx_ir` imports.
+
+## Device checks and utility roles
+
+Use new output directories. The active ONNX bundle is required for neural checks,
+but the source overlay and export dependencies are not needed by these commands:
+
+```bash
+uv run --locked python scripts/check_gpu.py
+uv run --locked python -m face_surveillance.vision.onnx_probe \
+  --manifest configs/onnx_models.json --output runs/shared-onnx-new
+uv run --locked python scripts/check_vision_cpu.py --output runs/cpu-regression-new
 ```
 
-Eleven cases: a public-domain astronaut face crop; flipped, brighter, darker, blurred and grayscale variants; black, white and gray inputs; seeded noise and a gradient. Their input hashes and the reference/export vectors are in the private export bundle. Maximum component difference was `2.71946e-7`; maximum pairwise cosine difference was `8.49366e-7`. All gates passed. Synthetic/altered inputs test conversion numerics, **not** real-world recognition or occlusion robustness. Calibration on the eventual study must use the actual selected runtime/model/preprocessing rather than assume this parity test chooses recognition thresholds.
+The first two require CUDA and fail visibly without it. The CPU regression explicitly
+requests CPU sessions in the GPU distribution; it does not silently convert a failed
+CUDA check into a CPU pass. It checks detection fixtures and finite embeddings,
+optionally comparing historical CUDA vectors when present. These are readiness checks,
+not identity accuracy or live-throughput benchmarks.
 
-Checkpoint conversion preserves the source's usage restrictions and does not create a new independently trained recognition approach. Original FaceNet checkpoint/right-of-use limitations remain documented in [MODEL_FEASIBILITY.md](MODEL_FEASIBILITY.md#asset-terms-and-provenance); no unrestricted redistribution/commercial grant is claimed. Models/embeddings/images are not committed.
+`model_probe.py` retains the original mixed PyTorch/ONNX CUDA reference experiment.
+To reproduce it with the source manifest and verified overlay:
 
-## Shared-runtime verification
+```bash
+uv run --locked python -m face_surveillance.vision.model_probe \
+  --manifest configs/model_probe.json --output runs/model-feasibility-new
+```
 
-`onnx_probe` checks all three models in one fresh default-environment process. It rejects already-loaded export-only libraries and actively blocks imports of `facenet_pytorch`, `onnxscript` and `onnx_ir`. None was installed in the default environment when the check passed. An actual node profile for each model contains CUDA execution only; CPU fallback is disabled.
+Its shared hash/preprocessing/embedding helpers remain used by the exporter and
+current ONNX/CPU checks. Preparation tools are not the application's worker; do not
+run exports in HTTP requests or routine API startup. Integrating a neural recognizer
+still needs a model-specific gallery and decision policy.
 
-The public astronaut/blank/two-copy still fixtures return 1/0/2 faces. Each encoder's 33 warmup/measured outputs is checked for finite, nonzero embeddings, normalized before repeatability checks. Raw FaceNet unit norm is checked separately during export parity. The two-copy fixture repeats one person; it is not an identity discrimination test.
+## Asset terms and provenance
 
-First 30-repeat shared-runtime run, RTX 4070 Laptop GPU, driver 615.78.08:
+- InsightFace code: MIT; supplied pretrained model usage has a separate non-commercial research restriction. The present project is a research prototype; weights are not committed or redistributed. [Upstream notice](https://github.com/deepinsight/insightface#license)
+- FaceNet wrapper code: MIT. Its VGGFace2/CASIA pretrained state dicts are converted from Sandberg's implementation, whose supplied InceptionResnetV1 models are documented as softmax-trained. They are not Google's original triplet-loss checkpoint. [PyTorch implementation](https://github.com/timesler/facenet-pytorch), [original checkpoint provenance](https://github.com/davidsandberg/facenet#pre-trained-models)
+- A separate, comprehensive weight grant for the selected VGGFace2-derived state dict was not established. Preserve this limitation; code MIT does not prove unrestricted weight/data rights. No commercial/redistribution clearance is claimed. This remains a provenance/licensing follow-up, separate from the successful technical probe.
+- Fixture: NASA astronaut Eileen Collins photograph bundled with scikit-image, documented as public domain. It is a technical fixture, not a volunteer identity or a substitute for a labeled study. [Fixture documentation](https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.astronaut)
 
-| Stage | Median / p95 ms | Executed CUDA node events |
-|---|---:|---:|
-| SCRFD 640×640, with adapter preprocessing/postprocessing | 9.67 / 9.82 | 4932 |
-| ArcFace, one prepared 112×112 crop | 3.73 / 3.79 | 4290 |
-| FaceNet ONNX, one prepared 160×160 input | 10.61 / 10.66 | 10461 |
+## Historical evidence
 
-These are short, batch-one host-to-host timings with profiling enabled and TF32 disabled. They exclude decoding, cropping, tracking, matching, persistence and preview. They are not an FPS claim or a fair speed comparison against the earlier different-config PyTorch probe. The reason for choosing ONNX here is shared-runtime compatibility; a speed improvement has not been established. Device-wide GPU memory sampled after loading was 891 MiB versus 45 MiB before, not a peak or process-exclusive measure.
-
-A second fresh-process runtime run also passed, with exactly matching embeddings across the two processes. Final runtime source/helper/lock hashes and the export source hash were checked against the saved reports. The original PyTorch/ORT GPU matrix checks and all 35 tests in the default environment also pass. The upstream scikit-image alignment deprecation warning remains visible; installed library code was not patched or warning-suppressed.
-
-## CPU execution and device policy
-
-The same three ONNX model files also execute on `CPUExecutionProvider` in the installed `onnxruntime-gpu` distribution. A separate CPU-only ORT package, checkpoint conversion or retraining is unnecessary for this environment. Hardware selection belongs to session configuration; it does not change the recognition approach or embedding space. This was tested on this laptop, not a fresh CPU-only machine with different library provisioning.
-
-An explicit one-off CPU diagnostic on 19 October used the active hash-verified manifest, the same fixed dimension overrides and preprocessing, one intra/inter-op thread, and sessions with `providers=["CPUExecutionProvider"]` and `disable_fallback()`. Executed-node profiles contained only CPU events for all three models. The astronaut and blank fixtures returned one and zero faces. Both encoders produced finite normalized 512-element vectors. The local evidence is `runs/cpu-readiness-20261019T183413/report.json`; it is an ignored diagnostic artifact, not a committed fixture or reusable CPU CLI.
-
-| Stage | CPU median, five measured calls after warmup |
-|---|---:|
-| SCRFD, including adapter preprocessing/postprocessing | 225.19 ms |
-| ArcFace, prepared crop | 92.43 ms |
-| FaceNet ONNX, prepared input | 23.90 ms |
-
-Maximum normalized-component differences against saved CUDA outputs were `9.0711e-6` for ArcFace and `1.3970e-7` for FaceNet. This checks one fixture's numerical agreement, not identity accuracy or universal device equivalence. Short single-thread CPU timings are diagnostic observations, not a sustained benchmark, a CPU real-time promise or a controlled hardware speed comparison.
-
-The checked-in `onnx_probe` and `check_gpu.py` deliberately remain **CUDA-required**. They fail when CUDA is unavailable; neither command exposes an application CPU mode or silently falls back. For the future video runner, implement explicit `cuda-required` and `cpu` profiles, record the requested/actual provider, and calibrate/version the selected runtime configuration. A GPU failure should fail the session visibly; changing to CPU starts a new explicit session. CPU performance tuning and automatic failover are outside this preparation task.
-
-## Final integration verification
-
-Before merging, the full default-environment suite passed **35 tests**, backend/script lint and formatting passed, the lockfile passed offline validation, and the unchanged frontend passed lint and production build. A fresh CUDA matrix check and shared-model run passed; `runs/shared-onnx-final-merge/report.json` records exclusively CUDA node execution for detector/ArcFace/FaceNet and no export-only imports. Its median stage timings were 8.79/3.46/11.03 ms under the same short-probe limitations above. The only GPU-script edit during finalization was Ruff formatting; its behavior is unchanged.
-
-The preparation gate is complete for local execution/export compatibility. Weight-usage provenance limitations, independent study data, identity calibration and video performance remain separate unresolved project gates. No application capability is inferred from the passing tests.
-
-## Architecture boundary for the team's next implementation
-
-- Treat `configs/onnx_models.json` as the hash-pinned local model bundle definition, preserving model-space/preprocessing identifiers when enrollment is implemented.
-- The export tool and smoke checker are preparation utilities, not the application's worker or API. Refactor their proven model settings into narrow adapters when building the video runner; do not call export in HTTP requests or at routine startup.
-- SCRFD fixes the pinned symbolic spatial dimensions to 640×640; ArcFace fixes batch one; FaceNet already has fixed input/output shapes. Change shape/batch profiles only through explicit re-export/revalidation.
-- Keep ArcFace landmark alignment and FaceNet box-crop preprocessing distinct; both see the same detected face but this is not a controlled loss-function-only comparison.
-- Next build the recorded-video replay/timestamp/sampling/measurement slice, then enrollment/calibration. This task intentionally stops before that code.
-
-Exporter API rationale: [PyTorch 2.14 ONNX documentation](https://docs.pytorch.org/docs/2.14/onnx.html). Optional tool provenance: [ONNX Script](https://github.com/microsoft/onnxscript). Actual versions/artifact hashes are pinned by `uv.lock`, source/derived manifests and local run reports; upstream documentation alone is not the acceptance evidence.
+The [archive index](archive/README.md) links dated timings, export parity observations,
+resolved failures and dependency workarounds. These records preserve the original
+18/35-test milestones and environment history. Current software checks are recorded
+in [project status](PROJECT_STATUS.md); old stage timings do not establish current
+application FPS or completed recognition evaluation.
