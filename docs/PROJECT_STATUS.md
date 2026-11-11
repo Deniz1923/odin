@@ -1,14 +1,16 @@
 # odin: project status and progress-report preparation
 
-Updated 11 November 2026. The current planning horizon is **approximately eight
-weeks**, with three team members. Earlier 10- and 12-week plans are historical.
-Exact project start/end dates and remaining weeks must come from the team's calendar.
+Updated 11 November 2026. Three team members have approximately eight weeks left
+until the **final report deadline of 4 January 2027**. The immediate deliverable is
+the **progress report due 27 November 2026**. These dates were supplied by the user
+and supersede the older 20 November date in the unchanged assignment text and the
+historical 10-/12-week planning assumptions. Submission times were not supplied.
 
-The immediate deliverable is a **progress report due 20 November 2026 at 23:59**,
-according to the [supplied assignment](../CENG391_Project_Report_Template/progress_report.txt).
-It records completed work, preliminary results, challenges and planned work.
-Independent final evaluation is remaining project work, not a prerequisite for
-an honest progress report. The final submission deadline is not established here.
+The progress report records completed work, preliminary results, challenges and
+planned work. Independent final evaluation is remaining project work, not a
+prerequisite for an honest progress report. See the
+[preliminary scope and schedule](SCOPE_AND_SCHEDULE.md) for proposed remaining tasks and
+historical completion evidence for the Gantt chart.
 
 ## Scope and requirement coverage
 
@@ -30,10 +32,12 @@ interface and privacy-aware stored face data.
 | Operator interface | Monitor, gallery, events/export and settings | Team usability and live-source demonstration |
 | Privacy | Encrypted descriptors, local guards, transient photos/previews, retention and deletion | Verify actual study recordings, exports and backup lifecycle |
 
-The earlier planned pair was ArcFace versus FaceNet; the classical baseline now
-also exists. LBP versus one neural encoder is a possible smaller two-method study.
-Record the team's selected comparison explicitly; neither a still-image execution
-probe nor two temporal variants constitutes a completed two-recognizer comparison.
+The progress-report target is LBP versus ArcFace. For the final project, the user
+envisions adding FaceNet and an ensemble, with exact design/scope still to be discussed.
+The [preliminary schedule](SCOPE_AND_SCHEDULE.md) treats this as a provisional research
+workstream after individual baselines, without assuming fusion improves results.
+Neither still-image execution nor two temporal variants constitutes a completed
+two-recognizer comparison.
 
 ## Preliminary evidence available for the report
 
@@ -73,7 +77,7 @@ parity on eleven numerical inputs. See the [archive index](archive/README.md) fo
 dated reports and limitations. Old 18/35/60 test counts describe different milestones;
 never present historical timings as current full-application FPS.
 
-## Next work within the eight-week project
+## Next work within the remaining delivery window
 
 This is a dependency order, not an invented calendar or assignment of contributors.
 
@@ -89,11 +93,10 @@ This is a dependency order, not an invented calendar or assignment of contributo
 
 Previously discussed event clips, stronger motion tracking and process isolation
 remain unimplemented targets/improvements. Quality-weighted temporal aggregation is
-a research hypothesis. Fusion and central multi-camera inference remain independent,
-equal-priority optional extensions after required workflows/evaluation have capacity.
-No positive fusion gain, new model training, remote accounts or cross-camera tracking
-is required by this plan. Preserve earlier preferences in the archive without turning
-every proposal into an immediate implementation obligation.
+a research hypothesis. The preliminary plan prioritizes the user's provisional ensemble
+target for final-stage research; multi-camera work is outside that schedule. Earlier
+extension preferences remain in the archive. No positive fusion gain, new model
+training, remote accounts or cross-camera tracking is promised by this plan.
 
 ## Progress-report checklist
 

@@ -14,6 +14,7 @@ is `LBPRecognizer`. See the [recognizer contract](docs/ARCHITECTURE.md#enrollmen
 | Document | Purpose |
 |---|---|
 | [Project status](docs/PROJECT_STATUS.md) | Course coverage, preliminary evidence, eight-week scope and progress-report checklist |
+| [Preliminary scope and schedule](docs/SCOPE_AND_SCHEDULE.md) | Completed milestones, remaining tasks, proposed team roles and report deadlines |
 | [Study guide](docs/PROJECT_REVIEW_AND_STUDY_GUIDE.md) | Reading route and concepts to explain |
 | [Classical walkthrough](docs/CLASSICAL_PIPELINE.md) | Implemented recognition algorithm |
 | [Architecture](docs/ARCHITECTURE.md) | Current components, concurrency and data lifecycle |
