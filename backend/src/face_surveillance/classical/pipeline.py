@@ -6,14 +6,11 @@ from dataclasses import dataclass, field
 import numpy as np
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .detection import prepare_face
-from .lbp import describe, match
-
 
 class Policy(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    threshold: float = Field(default=0.35, ge=0, le=1)
-    margin: float = Field(default=0.02, ge=0, le=1)
+    model_config = ConfigDict(extra="forbid", frozen=True, allow_inf_nan=False)
+    threshold: float = 0.35
+    margin: float = Field(default=0.02, ge=0)
     min_observations: int = Field(default=3, ge=1, le=16)
     min_span: float = Field(default=0.5, ge=0, le=2)
     observation_spacing: float = Field(default=0.25, ge=0.05, le=1)
@@ -46,7 +43,7 @@ class Track:
     seen: float
     state: str = "insufficient"
     person_id: str | None = None
-    distance: float | None = None
+    score: float | None = None
     margin: float | None = None
     reason: str = "collecting_evidence"
     evidence: deque = field(default_factory=lambda: deque(maxlen=16))
@@ -57,26 +54,24 @@ class Track:
         self.state, self.person_id, self.reason = "insufficient", None, reason
         self.evidence.clear()
         self.last_evidence = -float("inf")
-        self.distance = self.margin = None
+        self.score = self.margin = None
 
 
 class Pipeline:
-    def __init__(self, gallery, enabled, policy: Policy, detector=None):
+    def __init__(self, gallery, enabled, policy: Policy, detector=None, *, recognizer):
+        recognizer.validate_settings(policy.threshold, policy.margin)
         self.gallery, self.enabled, self.policy = gallery, enabled, policy
         self.detector = detector
+        self.recognizer = recognizer
         self.tracks: list[Track] = []
         self.next_id = 1
         self.last_time = -float("inf")
 
     def process(self, frame: np.ndarray, timestamp: float) -> dict:
         detections = []
-        for box in self.detector.detect(frame)[:32]:
-            gray, reason = prepare_face(frame, box)
-            detections.append(
-                dict(
-                    bbox=box, reason=reason, descriptor=describe(gray) if gray is not None else None
-                )
-            )
+        for detection in self.detector.detect(frame)[:32]:
+            descriptor, reason = self.recognizer.extract(frame, detection)
+            detections.append(dict(**detection, reason=reason, descriptor=descriptor))
         return self.update(detections, timestamp)
 
     def update(self, detections: list[dict], timestamp: float) -> dict:
@@ -126,7 +121,7 @@ class Pipeline:
             if descriptor is None:
                 track.reason = detection["reason"]
                 continue
-            result = match(descriptor, self.gallery, p.threshold, p.margin)
+            result = self.recognizer.match(descriptor, self.gallery, p.threshold, p.margin)
             identity = result["person_id"]
             # Space positive evidence, never checks for contradictory identity evidence.
             if (
@@ -134,7 +129,7 @@ class Pipeline:
                 and identity == track.person_id
                 and result["state"] == "candidate"
             ):
-                track.distance, track.margin = result["distance"], result["margin"]
+                track.score, track.margin = result["score"], result["margin"]
                 continue
             if result["state"] != "candidate":
                 track.reset(result["state"])
@@ -157,12 +152,13 @@ class Pipeline:
                         dict(
                             person_id=identity,
                             track=track.id,
-                            distance=result["distance"],
+                            score=result["score"],
+                            score_kind=self.recognizer.score_kind,
                             observations=len(track.evidence),
                         )
                     )
                     track.alerted.add(identity)
-            track.distance, track.margin = result["distance"], result["margin"]
+            track.score, track.margin = result["score"], result["margin"]
             track.last_evidence = timestamp
         return dict(
             tracks=[
@@ -171,7 +167,8 @@ class Pipeline:
                     bbox=t.bbox,
                     state=t.state,
                     person_id=t.person_id,
-                    distance=t.distance,
+                    score=t.score,
+                    score_kind=self.recognizer.score_kind,
                     margin=t.margin,
                     reason=t.reason,
                     observations=len(t.evidence),

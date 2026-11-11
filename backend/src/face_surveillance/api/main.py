@@ -28,20 +28,28 @@ class AlertRequest(BaseModel):
     enabled: bool
 
 
-def create_app(data_dir: Path | None = None, *, max_body_bytes: int = 130_000_000) -> FastAPI:
+def create_app(
+    data_dir: Path | None = None,
+    *,
+    max_body_bytes: int = 130_000_000,
+    detector=None,
+    recognizer=None,
+) -> FastAPI:
     token = secrets.token_urlsafe(32)
 
     @asynccontextmanager
     async def lifespan(app):
         app.state.service = Service(
-            data_dir or Path(os.environ.get("ODIN_DATA_DIR", ROOT / "data/classical"))
+            data_dir or Path(os.environ.get("ODIN_DATA_DIR", ROOT / "data/classical")),
+            detector=detector,
+            recognizer=recognizer,
         )
         try:
             yield
         finally:
             app.state.service.close()
 
-    app = FastAPI(title="odin — Classical Face Recognition", version="0.2.0", lifespan=lifespan)
+    app = FastAPI(title="odin — Face Recognition", version="0.2.0", lifespan=lifespan)
     app.add_middleware(
         TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "[::1]", "testserver"]
     )

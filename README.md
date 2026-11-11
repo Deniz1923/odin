@@ -5,6 +5,10 @@ pretrained Haar face detection and **our own NumPy implementation of LBP, spatia
 histograms and chi-square matching**. Existing SCRFD/ArcFace/FaceNet preparation
 tools remain available for later comparisons; they do not run in the classical app.
 
+Detection and recognition are injected into the shared pipeline. Each recognizer
+owns its preprocessing, descriptors and matching settings; the enabled implementation
+is `LBPRecognizer`. See the [recognizer contract](docs/ARCHITECTURE.md#enrollment-and-recognition).
+
 ## Start here as a teammate
 
 | Document | Purpose |
@@ -50,6 +54,12 @@ Haar is primarily a frontal-face detector. Pose, small faces, masks and poor lig
 can cause detection or recognition failures. The default matching distance and
 quality rules are **uncalibrated engineering settings**, not accuracy guarantees.
 Distance is lower for closer matches; it is not a percentage probability.
+
+Track/event JSON now carries `score` and `score_kind` instead of `distance`.
+Existing event databases migrate on opening without changing recorded values or keys;
+older code expecting the previous schema will not work with a migrated database.
+Legacy LBP policy files remain readable; newly saved settings include their descriptor
+space so another recognizer cannot reuse them silently.
 
 For frontend development, run the API above and `npm --prefix frontend run dev`.
 The Vite server proxies `/api` to the API without rewriting its path.

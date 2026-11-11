@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parents[4]
 
 
 class HaarDetector:
+    name = "Haar frontal face"
+
     def __init__(self, manifest: Path | None = None):
         manifest = manifest or ROOT / "configs/haar_model.json"
         spec = json.loads(manifest.read_text())
@@ -24,14 +26,14 @@ class HaarDetector:
         if self.cascade.empty():
             raise ValueError("Cannot load Haar cascade")
 
-    def detect(self, bgr: np.ndarray) -> list[list[int]]:
+    def detect(self, bgr: np.ndarray) -> list[dict]:
         gray = cv2.equalizeHist(cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY))
         # Bound detector work while mapping boxes back to original pixels.
         scale = min(1.0, 800 / max(gray.shape))
         if scale < 1:
             gray = cv2.resize(gray, None, fx=scale, fy=scale)
         boxes = self.cascade.detectMultiScale(gray, 1.1, 5, minSize=(40, 40))
-        return [[int(v / scale) for v in box] for box in boxes]
+        return [dict(bbox=[int(v / scale) for v in box]) for box in boxes]
 
 
 def prepare_face(bgr: np.ndarray, box: list[int]) -> tuple[np.ndarray | None, str]:

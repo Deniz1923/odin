@@ -63,6 +63,12 @@ then fewer wrong-known/unknown accepts and a lower threshold. Matching also uses
 the configured distinct-person margin. This is not probability calibration or a
 calibration of the full temporal/event policy.
 
+The runner accepts an injected detector/recognizer in Python; its CLI still composes
+Haar plus LBP. Enrollment, prediction and calibration all use the selected recognizer's
+extraction and matching. Calibration respects its declared score direction/range;
+the default remains lower-is-better LBP distance. Reports/predictions/events now use
+`score` and `score_kind`, recording raw values rather than converting between scales.
+
 Copy the selected threshold into operator settings and the frozen test manifest.
 Adding templates/identities or changing preparation changes score distributions and
 requires rechecking applicability. One-person galleries have no runner-up margin.

@@ -16,9 +16,9 @@ import cv2
 import numpy as np
 from PIL import Image, UnidentifiedImageError
 
-from .detection import HaarDetector, prepare_face
-from .lbp import SPACE, describe
+from .detection import HaarDetector
 from .pipeline import Pipeline, Policy
+from .recognition import LBPRecognizer
 from .storage import Store
 
 
@@ -39,20 +39,31 @@ def decode_image(content: bytes) -> np.ndarray:
 
 
 class Service:
-    def __init__(self, directory: Path):
+    def __init__(self, directory: Path, *, detector=None, recognizer=None):
         self.lock = threading.RLock()
+        self.recognizer = recognizer if recognizer is not None else LBPRecognizer()
         self.store = Store(
-            directory, retention_days=int(os.environ.get("ODIN_EVENT_RETENTION_DAYS", "7"))
+            directory,
+            retention_days=int(os.environ.get("ODIN_EVENT_RETENTION_DAYS", "7")),
+            recognizer=self.recognizer,
         )
         for orphan in self.store.directory.glob("upload-*.video"):
             orphan.unlink(missing_ok=True)
-        self.detector = HaarDetector()
+        self.detector = detector if detector is not None else HaarDetector()
         self.policy_path = self.store.directory / "policy.json"
-        self.policy = (
-            Policy.model_validate_json(self.policy_path.read_text())
-            if self.policy_path.exists()
-            else Policy()
-        )
+        if self.policy_path.exists():
+            saved = json.loads(self.policy_path.read_text())
+            # Files without a space tag predate the recognizer boundary and contain LBP settings.
+            if saved.get("descriptor_space", LBPRecognizer.space) != self.recognizer.space:
+                raise ValueError("Incompatible decision settings descriptor space")
+            self.policy = Policy.model_validate(saved.get("policy", saved))
+        else:
+            self.policy = Policy(
+                threshold=self.recognizer.default_threshold,
+                margin=self.recognizer.default_margin,
+            )
+        self.recognizer.validate_settings(self.policy.threshold, self.policy.margin)
+        gallery = self.store.gallery()
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="odin-command")
         self.command_slots = threading.BoundedSemaphore(8)
         self.stop_event = threading.Event()
@@ -69,14 +80,20 @@ class Service:
             dropped=0,
             error=None,
         )
-        self.reload_gallery()
+        self.reload_gallery(gallery)
 
-    def reload_gallery(self):
+    def reload_gallery(self, gallery=None):
         people = self.store.people()
         self.names = {p["id"]: p["name"] for p in people}
         enabled = {p["id"] for p in people if p["alert_enabled"]}
         next_id = self.pipeline.next_id if hasattr(self, "pipeline") else 1
-        self.pipeline = Pipeline(self.store.gallery(), enabled, self.policy, self.detector)
+        self.pipeline = Pipeline(
+            self.store.gallery() if gallery is None else gallery,
+            enabled,
+            self.policy,
+            self.detector,
+            recognizer=self.recognizer,
+        )
         self.pipeline.next_id = next_id
         self.snapshot["tracks"], self.jpeg = [], None
 
@@ -91,15 +108,15 @@ class Service:
             descriptors = []
             for index, content in enumerate(images):
                 frame = decode_image(content)
-                boxes = self.detector.detect(frame)
-                if len(boxes) != 1:
+                detections = self.detector.detect(frame)
+                if len(detections) != 1:
                     raise ValueError(
-                        f"Image {index + 1}: expected exactly one face, found {len(boxes)}"
+                        f"Image {index + 1}: expected exactly one face, found {len(detections)}"
                     )
-                gray, reason = prepare_face(frame, boxes[0])
-                if gray is None:
+                descriptor, reason = self.recognizer.extract(frame, detections[0])
+                if descriptor is None:
                     raise ValueError(f"Image {index + 1}: {reason}")
-                descriptors.append(describe(gray))
+                descriptors.append(descriptor)
             result = self.store.enroll(
                 name, descriptors, authorized=authorized, alert_enabled=alert_enabled
             )
@@ -117,10 +134,17 @@ class Service:
             self.reload_gallery()
 
     def configure(self, policy: Policy):
+        self.recognizer.validate_settings(policy.threshold, policy.margin)
         self.stop()
         with self.lock:
             staged = self.policy_path.with_suffix(".tmp")
-            staged.write_text(json.dumps(policy.model_dump(), indent=2) + "\n")
+            staged.write_text(
+                json.dumps(
+                    dict(descriptor_space=self.recognizer.space, policy=policy.model_dump()),
+                    indent=2,
+                )
+                + "\n"
+            )
             staged.chmod(0o600)
             staged.replace(self.policy_path)
             self.policy = policy
@@ -181,8 +205,12 @@ class Service:
             status.update(
                 policy=self.policy.model_dump(),
                 calibrated=False,
-                descriptor_space=SPACE,
-                detector="Haar frontal face",
+                descriptor_space=self.recognizer.space,
+                recognizer=self.recognizer.name,
+                score_kind=self.recognizer.score_kind,
+                score_range=self.recognizer.score_range,
+                higher_is_better=self.recognizer.higher_is_better,
+                detector=self.detector.name,
                 frame_age=None
                 if self.last_frame_at is None
                 else time.monotonic() - self.last_frame_at,
@@ -293,7 +321,8 @@ class Service:
                             session=self.snapshot["session"],
                             policy={
                                 **self.policy.model_dump(),
-                                "descriptor_space": SPACE,
+                                "descriptor_space": self.recognizer.space,
+                                "score_kind": self.recognizer.score_kind,
                                 "detector_hash": self.detector.model_hash,
                                 "calibrated": False,
                             },

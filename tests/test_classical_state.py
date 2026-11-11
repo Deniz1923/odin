@@ -3,6 +3,8 @@ import sqlite3
 import numpy as np
 import pytest
 
+from face_surveillance.classical.recognition import LBPRecognizer
+
 
 def template(index=0):
     value = np.zeros((64, 256), dtype=np.float32)
@@ -13,12 +15,22 @@ def template(index=0):
 def test_gallery_encrypts_templates_and_deletion_removes_events(tmp_path):
     from face_surveillance.classical.storage import Store
 
-    store = Store(tmp_path / "private")
+    store = Store(tmp_path / "private", recognizer=LBPRecognizer())
     with pytest.raises(ValueError):
         store.enroll("A", [template()], authorized=False)
     person = store.enroll("A", [template()], authorized=True, alert_enabled=True)
     np.testing.assert_array_equal(store.gallery()[person["id"]][0], template())
-    store.add_event(person["id"], "webcam:0", "session", 1, 0.1, 3, {}, now=1000)
+    store.add_event(
+        person["id"],
+        "webcam:0",
+        "session",
+        1,
+        0.1,
+        3,
+        {},
+        now=1000,
+        score_kind="chi_square_distance",
+    )
     assert len(store.events(now=1001)) == 1
     db = sqlite3.connect(store.path)
     payload = db.execute("select payload from templates").fetchone()[0]
@@ -27,23 +39,30 @@ def test_gallery_encrypts_templates_and_deletion_removes_events(tmp_path):
     store.delete(person["id"])
     assert store.gallery() == {}
     assert store.events(now=1001) == []
-    assert Store(tmp_path / "private").people() == []
+    assert Store(tmp_path / "private", recognizer=LBPRecognizer()).people() == []
 
 
 def test_retention_and_cross_track_cooldown(tmp_path):
     from face_surveillance.classical.storage import Store
 
-    store = Store(tmp_path / "private", retention_days=1)
+    store = Store(tmp_path / "private", retention_days=1, recognizer=LBPRecognizer())
     p = store.enroll("A", [template()], authorized=True, alert_enabled=True)["id"]
-    assert store.add_event(p, "camera", "s", 1, 0.1, 3, {}, now=1000)
-    assert store.add_event(p, "camera", "s", 2, 0.1, 3, {}, now=1001) is None
+    assert store.add_event(
+        p, "camera", "s", 1, 0.1, 3, {}, now=1000, score_kind="chi_square_distance"
+    )
+    assert (
+        store.add_event(p, "camera", "s", 2, 0.1, 3, {}, now=1001, score_kind="chi_square_distance")
+        is None
+    )
     assert store.events(now=100000) == []
 
 
 def test_temporal_confirmation_unknown_conflict_and_expiry():
     from face_surveillance.classical.pipeline import Pipeline, Policy
 
-    pipeline = Pipeline({"A": [template()], "B": [template(1)]}, {"A"}, Policy())
+    pipeline = Pipeline(
+        {"A": [template()], "B": [template(1)]}, {"A"}, Policy(), recognizer=LBPRecognizer()
+    )
 
     def observation(value):
         return [{"bbox": [0, 0, 80, 80], "descriptor": value, "reason": "usable"}]
@@ -61,14 +80,19 @@ def test_temporal_confirmation_unknown_conflict_and_expiry():
     assert result["events"] == []
     result = pipeline.update([{"bbox": [0, 0, 80, 80], "descriptor": None, "reason": "blur"}], 2.3)
     assert result["tracks"][0]["state"] == "insufficient"
-    unknown = Pipeline({"A": [template()]}, {"A"}, Policy())
+    unknown = Pipeline({"A": [template()]}, {"A"}, Policy(), recognizer=LBPRecognizer())
     assert unknown.update(observation(template(2)), 0)["tracks"][0]["state"] == "unknown"
 
 
 def test_ambiguous_association_does_not_transfer_confirmed_identity():
     from face_surveillance.classical.pipeline import Pipeline, Policy
 
-    pipeline = Pipeline({"A": [template()]}, {"A"}, Policy(min_observations=1, min_span=0))
+    pipeline = Pipeline(
+        {"A": [template()]},
+        {"A"},
+        Policy(min_observations=1, min_span=0),
+        recognizer=LBPRecognizer(),
+    )
     one = [{"bbox": [0, 0, 80, 80], "descriptor": template(), "reason": "usable"}]
     assert pipeline.update(one, 0)["events"]
     two = one + [{"bbox": [10, 0, 80, 80], "descriptor": template(), "reason": "usable"}]
@@ -81,7 +105,10 @@ def test_new_identity_needs_new_confirmation_and_can_emit_its_own_event():
     from face_surveillance.classical.pipeline import Pipeline, Policy
 
     pipeline = Pipeline(
-        {"A": [template()], "B": [template(1)]}, {"A", "B"}, Policy(min_observations=1, min_span=0)
+        {"A": [template()], "B": [template(1)]},
+        {"A", "B"},
+        Policy(min_observations=1, min_span=0),
+        recognizer=LBPRecognizer(),
     )
 
     def observation(value):
@@ -101,7 +128,9 @@ def test_impossible_temporal_policy_is_rejected():
 def test_contradiction_between_sample_times_clears_confirmation():
     from face_surveillance.classical.pipeline import Pipeline, Policy
 
-    pipeline = Pipeline({"A": [template()], "B": [template(1)]}, {"A"}, Policy())
+    pipeline = Pipeline(
+        {"A": [template()], "B": [template(1)]}, {"A"}, Policy(), recognizer=LBPRecognizer()
+    )
 
     def obs(value):
         return [{"bbox": [0, 0, 80, 80], "descriptor": value, "reason": "usable"}]
@@ -116,7 +145,12 @@ def test_contradiction_between_sample_times_clears_confirmation():
 def test_merge_resets_every_track_involved_in_ambiguous_assignment():
     from face_surveillance.classical.pipeline import Pipeline, Policy
 
-    pipeline = Pipeline({"A": [template()]}, {"A"}, Policy(min_observations=1, min_span=0))
+    pipeline = Pipeline(
+        {"A": [template()]},
+        {"A"},
+        Policy(min_observations=1, min_span=0),
+        recognizer=LBPRecognizer(),
+    )
     pipeline.update(
         [
             {"bbox": [0, 0, 80, 80], "descriptor": template(), "reason": "usable"},

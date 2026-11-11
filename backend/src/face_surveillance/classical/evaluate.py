@@ -1,4 +1,4 @@
-"""Offline, exhaustive classical replay and validation-only threshold selection.
+"""Offline, exhaustive replay and validation-only threshold selection.
 
 Example: python -m face_surveillance.classical.evaluate --manifest study.json --output runs/study-01
 """
@@ -13,9 +13,9 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from .detection import HaarDetector, prepare_face
-from .lbp import SPACE, describe, match
+from .detection import HaarDetector
 from .pipeline import Pipeline, Policy, overlap
+from .recognition import LBPRecognizer
 from .service import decode_image
 
 
@@ -108,7 +108,7 @@ def score_events(events, encounters):
     )
 
 
-def select_threshold(rows, *, split, max_unknown_fpir=0.05, margin=0.02):
+def select_threshold(rows, *, recognizer, split, max_unknown_fpir=0.05, margin=0.02):
     if split != "validation":
         raise ValueError("Calibration requires a validation split, never the final test split")
     known = sum(row["known"] for row in rows)
@@ -118,19 +118,25 @@ def select_threshold(rows, *, split, max_unknown_fpir=0.05, margin=0.02):
     if not 0 <= max_unknown_fpir <= 1:
         raise ValueError("Unknown FPIR constraint must lie between zero and one")
     choices = []
-    for threshold in sorted({0.0, *(row["distance"] for row in rows)}):
+    lower, upper = recognizer.score_range
+    for threshold in sorted({lower, upper, *(row["score"] for row in rows)}):
+        recognizer.validate_settings(threshold, margin)
         accepted = [
             row
             for row in rows
-            if row["distance"] <= threshold
-            and (row["margin"] is None or row["margin"] >= margin)
-            and row["margin"] != 0
+            if (
+                row["score"] >= threshold
+                if recognizer.higher_is_better
+                else row["score"] <= threshold
+            )
+            and (row["margin"] is None or (row["margin"] > 1e-12 and row["margin"] >= margin))
         ]
         correct = sum(row["known"] and row["correct"] for row in accepted)
         wrong = sum(row["known"] and not row["correct"] for row in accepted)
         false = sum(not row["known"] for row in accepted)
         if false / unknown <= max_unknown_fpir:
-            choices.append((correct, -wrong, -false, -threshold, threshold))
+            strictness = threshold if recognizer.higher_is_better else -threshold
+            choices.append((correct, -wrong, -false, strictness, threshold))
     if not choices:
         raise ValueError("No threshold satisfies validation constraint; use a stricter margin")
     best = max(choices)
@@ -144,11 +150,21 @@ def select_threshold(rows, *, split, max_unknown_fpir=0.05, margin=0.02):
         unknown=unknown,
         max_unknown_fpir=max_unknown_fpir,
         calibrated_probability=False,
-        scope="single-observation distance threshold; validate temporal/event behavior separately",
+        score_kind=recognizer.score_kind,
+        higher_is_better=recognizer.higher_is_better,
+        scope="single-observation score threshold; validate temporal/event behavior separately",
     )
 
 
-def run(manifest_path: Path, output: Path, *, calibrate=False, max_unknown_fpir=0.05):
+def run(
+    manifest_path: Path,
+    output: Path,
+    *,
+    calibrate=False,
+    max_unknown_fpir=0.05,
+    detector=None,
+    recognizer=None,
+):
     manifest = json.loads(manifest_path.read_text())
     if manifest.get("schema_version") != 1 or manifest.get("split") not in (
         "validation",
@@ -158,8 +174,17 @@ def run(manifest_path: Path, output: Path, *, calibrate=False, max_unknown_fpir=
         raise ValueError("Expected schema_version 1 and split validation/test/smoke")
     if calibrate and manifest["split"] != "validation":
         raise ValueError("Calibration requires validation split")
-    policy = Policy(**manifest.get("policy", {}))
-    detector, gallery, enabled = HaarDetector(), {}, set()
+    recognizer = recognizer if recognizer is not None else LBPRecognizer()
+    policy = Policy(
+        **{
+            "threshold": recognizer.default_threshold,
+            "margin": recognizer.default_margin,
+            **manifest.get("policy", {}),
+        }
+    )
+    recognizer.validate_settings(policy.threshold, policy.margin)
+    detector = detector if detector is not None else HaarDetector()
+    gallery, enabled = {}, set()
     files = {}
 
     def resolve(relative):
@@ -173,13 +198,14 @@ def run(manifest_path: Path, output: Path, *, calibrate=False, max_unknown_fpir=
         samples = []
         for name in person["images"]:
             frame = decode_image(resolve(name).read_bytes())
-            boxes = detector.detect(frame)
-            if len(boxes) != 1:
+            detections = detector.detect(frame)
+            if len(detections) != 1:
                 raise ValueError(f"Enrollment {name}: expected exactly one detected face")
-            gray, reason = prepare_face(frame, boxes[0])
-            if gray is None:
+            descriptor, reason = recognizer.extract(frame, detections[0])
+            if descriptor is None:
                 raise ValueError(f"Enrollment {name}: {reason}")
-            samples.append(describe(gray))
+            recognizer.validate_descriptor(descriptor)
+            samples.append(descriptor)
         gallery[person["person_id"]] = samples
         if person.get("alert_enabled", False):
             enabled.add(person["person_id"])
@@ -187,8 +213,10 @@ def run(manifest_path: Path, output: Path, *, calibrate=False, max_unknown_fpir=
     report = dict(
         status="running",
         split=manifest["split"],
-        model="classical-lbph",
-        descriptor_space=SPACE,
+        model=recognizer.name,
+        descriptor_space=recognizer.space,
+        score_kind=recognizer.score_kind,
+        higher_is_better=recognizer.higher_is_better,
         detector_hash=detector.model_hash,
         manifest_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
         policy=policy.model_dump(),
@@ -209,7 +237,7 @@ def run(manifest_path: Path, output: Path, *, calibrate=False, max_unknown_fpir=
                 if digest in seen_videos:
                     raise ValueError("Duplicate video bytes would inflate independent exposure")
                 seen_videos.add(digest)
-                pipeline = Pipeline(gallery, enabled, policy, detector)
+                pipeline = Pipeline(gallery, enabled, policy, detector, recognizer=recognizer)
                 annotations = {int(a["frame"]): a for a in video.get("annotations", [])}
                 if len(annotations) != len(video.get("annotations", [])):
                     raise ValueError("Duplicate frame annotations")
@@ -256,18 +284,23 @@ def run(manifest_path: Path, output: Path, *, calibrate=False, max_unknown_fpir=
                             conditions[condition].update(metrics)
                             if calibrate:
                                 observations = []
-                                for box in detector.detect(frame):
-                                    gray, _ = prepare_face(frame, box)
-                                    if gray is not None:
+                                for detection in detector.detect(frame):
+                                    descriptor, _ = recognizer.extract(frame, detection)
+                                    if descriptor is not None:
                                         observations.append(
-                                            dict(bbox=box, descriptor=describe(gray))
+                                            dict(bbox=detection["bbox"], descriptor=descriptor)
                                         )
                                 for index, observation in assignments(observations, truth).items():
-                                    candidate = match(observation["descriptor"], gallery, 1, 0)
-                                    if candidate["distance"] is not None:
+                                    permissive = recognizer.score_range[
+                                        0 if recognizer.higher_is_better else 1
+                                    ]
+                                    candidate = recognizer.match(
+                                        observation["descriptor"], gallery, permissive, 0
+                                    )
+                                    if candidate["score"] is not None:
                                         calibration_rows.append(
                                             dict(
-                                                distance=candidate["distance"],
+                                                score=candidate["score"],
                                                 margin=candidate["margin"],
                                                 known=truth[index]["person_id"] in gallery,
                                                 correct=candidate["person_id"]
@@ -303,6 +336,7 @@ def run(manifest_path: Path, output: Path, *, calibrate=False, max_unknown_fpir=
         if calibrate:
             report["calibration"] = select_threshold(
                 calibration_rows,
+                recognizer=recognizer,
                 split=manifest["split"],
                 max_unknown_fpir=max_unknown_fpir,
                 margin=policy.margin,

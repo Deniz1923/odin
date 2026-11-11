@@ -11,11 +11,9 @@ from pathlib import Path
 import numpy as np
 from cryptography.fernet import Fernet
 
-from .lbp import SPACE
-
 
 class Store:
-    def __init__(self, directory: Path, retention_days: int = 7):
+    def __init__(self, directory: Path, retention_days: int = 7, *, recognizer):
         if not 1 <= retention_days <= 365:
             raise ValueError("Event retention must be 1–365 days")
         self.directory = Path(directory)
@@ -23,6 +21,7 @@ class Store:
         self.directory.chmod(0o700)
         self.path = self.directory / "odin.sqlite3"
         self.retention_days = retention_days
+        self.recognizer = recognizer
         key = self.directory / "templates.key"
         if not key.exists():
             if self.path.exists():
@@ -43,10 +42,19 @@ class Store:
                   id TEXT PRIMARY KEY,
                   person_id TEXT NOT NULL REFERENCES people(id) ON DELETE CASCADE,
                   source TEXT NOT NULL, session TEXT NOT NULL, track INTEGER NOT NULL,
-                  distance REAL NOT NULL, observations INTEGER NOT NULL, policy TEXT NOT NULL,
+                  score REAL NOT NULL, score_kind TEXT NOT NULL,
+                  observations INTEGER NOT NULL, policy TEXT NOT NULL,
                   created REAL NOT NULL, acknowledged INTEGER NOT NULL DEFAULT 0,
                   UNIQUE(session, track, person_id));
             """)
+            columns = {row["name"] for row in db.execute("PRAGMA table_info(events)")}
+            if "distance" in columns:
+                db.execute("ALTER TABLE events RENAME COLUMN distance TO score")
+            if "score_kind" not in columns:
+                db.execute(
+                    "ALTER TABLE events ADD COLUMN score_kind TEXT NOT NULL "
+                    "DEFAULT 'chi_square_distance'"
+                )
         self.path.chmod(0o600)
         self.sweep()
 
@@ -81,13 +89,7 @@ class Store:
         encrypted = []
         for descriptor in descriptors:
             value = np.asarray(descriptor, dtype=np.float32)
-            if (
-                value.shape != (16384,)
-                or not np.isfinite(value).all()
-                or (value < 0).any()
-                or value.sum() <= 0
-            ):
-                raise ValueError("Invalid LBP descriptor")
+            self.recognizer.validate_descriptor(value)
             encrypted.append(self.cipher.encrypt(value.astype("<f4").tobytes()))
         person = dict(id=uuid.uuid4().hex, name=name.strip(), alert_enabled=bool(alert_enabled))
         with self.connect() as db:
@@ -97,7 +99,7 @@ class Store:
             )
             db.executemany(
                 "INSERT INTO templates VALUES (?,?,?)",
-                [(person["id"], SPACE, payload) for payload in encrypted],
+                [(person["id"], self.recognizer.space, payload) for payload in encrypted],
             )
         return person
 
@@ -105,11 +107,10 @@ class Store:
         gallery = {}
         with self.connect() as db:
             for row in db.execute("SELECT * FROM templates"):
-                if row["space"] != SPACE:
+                if row["space"] != self.recognizer.space:
                     raise ValueError("Incompatible gallery descriptor space")
                 value = np.frombuffer(self.cipher.decrypt(row["payload"]), dtype="<f4").copy()
-                if value.shape != (16384,) or not np.isfinite(value).all():
-                    raise ValueError("Corrupt gallery descriptor")
+                self.recognizer.validate_descriptor(value)
                 gallery.setdefault(row["person_id"], []).append(value)
         return gallery
 
@@ -139,10 +140,11 @@ class Store:
         source,
         session,
         track,
-        distance,
+        score,
         observations,
         policy,
         *,
+        score_kind,
         now=None,
         cooldown=30,
     ):
@@ -161,14 +163,17 @@ class Store:
             if last is not None and now - last < cooldown:
                 return None
             result = db.execute(
-                "INSERT OR IGNORE INTO events VALUES (?,?,?,?,?,?,?,?,?,0)",
+                "INSERT OR IGNORE INTO events "
+                "(id,person_id,source,session,track,score,score_kind,observations,policy,created) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?)",
                 (
                     event_id,
                     person_id,
                     source,
                     session,
                     track,
-                    distance,
+                    score,
+                    score_kind,
                     observations,
                     json.dumps(policy),
                     now,

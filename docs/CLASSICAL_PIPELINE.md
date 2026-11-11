@@ -3,9 +3,10 @@
 ## Follow one observation
 
 `Service` receives camera or replay frames. `HaarDetector` locates faces.
-`prepare_face` extracts, resizes, quality-checks and equalizes a grayscale crop.
-`describe` computes an LBP histogram descriptor. `match` compares it with authorized
-reference descriptors. `Pipeline` associates boxes and accumulates time-spaced
+The injected `LBPRecognizer.extract` uses `prepare_face` to crop, resize,
+quality-check and equalize grayscale, then `describe` computes an LBP descriptor.
+`LBPRecognizer.match` compares it with authorized references. The shared `Pipeline`
+associates boxes and accumulates time-spaced
 identity evidence. Enabled, fresh confirmations propose an appearance event;
 `Store` persists it after eligibility and cooldown checks. The browser displays
 the preview, decisions and event history.

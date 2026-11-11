@@ -41,15 +41,15 @@ Checks rerun on 11 November 2026:
 
 | Check | Observed result | What it supports |
 |---|---|---|
-| Python suite | 60 passed | Algorithm, state, API and utility regression behavior |
+| Python suite | 70 passed | Algorithm, state, API and utility regression behavior, including the recognizer boundary and legacy data compatibility |
 | Backend Ruff lint/format | Passed | Static/style checks |
 | Frontend lint/build | Passed | Linting, type checking and production compilation |
 | Classical smoke | 25 offline frames, one correct fixture event, deletion checked | Real Haar/LBP replay and service integration |
 | Explicit CPU neural regression | SCRFD single/blank/two-copy counts 1/0/2; finite `[1,512]` encoder outputs | Model execution and preprocessing consistency |
 
 Fresh local smoke reports were written to
-`/tmp/odin-understanding-smoke-20261111/evaluation/report.json` and
-`/tmp/odin-understanding-cpu-20261111/report.json`. These temporary files are not
+`/tmp/odin-recognizer-smoke-20261111/evaluation/report.json` and
+`/tmp/odin-recognizer-cpu-20261111/report.json`. These temporary files are not
 durable or cloned evidence. Reproduce retained runs under ignored `runs/` with the
 [README checks](../README.md#checks-and-learning) before citing them in submission.
 
@@ -58,6 +58,15 @@ frames. It is plumbing evidence, not independent participant accuracy, unknown-p
 robustness or 20 independent samples. CPU differences from historical CUDA vectors
 were about `9.07e-6` (ArcFace) and `1.40e-7` (FaceNet), measuring numerical consistency.
 GPU/live-camera/endurance checks were not rerun in this review.
+
+The shared pipeline now accepts a recognizer that owns preparation, descriptor
+validation and matching. Enrollment and evaluation use the same extraction contract;
+storage and UI carry labeled raw scores. Tests exercise different crop/color
+preparation, signed two-value descriptors and higher-is-better matching, plus legacy
+LBP database/policy compatibility. This is an interface regression test double,
+not an integrated neural method or a completed second recognition approach. All 25
+LBP smoke predictions and aggregate metrics matched the earlier baseline after
+the `distance` → `score` field rename.
 
 Historical model preparation includes CUDA execution profiles and FaceNet export
 parity on eleven numerical inputs. See the [archive index](archive/README.md) for
