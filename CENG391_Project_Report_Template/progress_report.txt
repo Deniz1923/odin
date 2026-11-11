@@ -43,3 +43,19 @@ Each group should submit one report in PDF format, stating the group ID like G11
 
 The GenAI Usage Policy outlined in the course syllabus applies to this homework. AI tools may support your learning but must not replace your own work. You must be able to explain and reproduce everything you submit. If you use any GenAI tool, you must disclose its name with explicit version and briefly explain how it was used in your submission. Undisclosed or unauthorized AI-generated work may constitute an academic integrity violation.
 
+SYLLABUS COURSE GENAI USAGE POLICY
+
+GenAI Usage Policy
+Generative Artificial Intelligence (GenAI) tools such as ChatGPT, Claude, Gemini, and Copilot
+may be used as learning-support tools when permitted by the instructor. Their use must support,
+not replace, the student's own understanding, reasoning, and technical work.
+Students must:
+• ensure that submitted work reflects their own understanding and contribution;
+• be able to explain, justify, and reproduce all submitted work;
+• verify AI-generated content, code, calculations, and references for correctness;
+• disclose GenAI use in assessed work when required, including the tool, purpose, and
+how the output was used or revised;
+• never submit substantial AI-generated work as their own or enter confidential, personal,
+or company data into unauthorized AI tools.
+Students remain fully responsible for every word, calculation, design decision, and line of code
+they submit, regardless of the tools used during preparation.
