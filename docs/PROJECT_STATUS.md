@@ -83,20 +83,24 @@ This is a dependency order, not an invented calendar or assignment of contributo
 
 1. Prepare the progress report from actual implementation and preliminary evidence.
    Agree on named task owners, planned dates, current status and contributions.
-2. Collect a manageable pilot with authorized participants, independent enrollment
-   and validation sessions, unknown people, and required condition labels.
+2. Collect manageable [participant and actor-media pilots](DATASETS.md), with independent
+   enrollment and validation sessions, unknown people, and required condition labels;
+   retain public research datasets as an additional source for later.
 3. Calibrate LBP on validation recordings and inspect failure cases.
 4. Integrate the selected neural recognition path with separate model-specific
    preparation, templates and thresholds; compare on the same study inputs.
 5. Freeze test choices, complete held-out condition/event results and sustained live
    measurements, and document limitations for the later final submission.
 
-Previously discussed event clips, stronger motion tracking and process isolation
-remain unimplemented targets/improvements. Quality-weighted temporal aggregation is
-a research hypothesis. The preliminary plan prioritizes the user's provisional ensemble
-target for final-stage research; multi-camera work is outside that schedule. Earlier
-extension preferences remain in the archive. No positive fusion gain, new model
-training, remote accounts or cross-camera tracking is promised by this plan.
+The user added an ensemble evidence panel, recognition comparison plots and bounded
+event evidence clips as planned final-product requirements. These are not implemented;
+the [preliminary schedule](SCOPE_AND_SCHEDULE.md) gives their outcomes and dates.
+Two-camera room/corridor-level location estimation remains an **undecided,
+unscheduled proposal**, not a final-delivery commitment or Gantt workstream. Its
+[technical design](LOCATION_ESTIMATION_PROPOSAL.md) is preserved for discussion.
+Single-camera image zones/trails are excluded. Stronger tracking, process isolation
+and quality-weighted aggregation remain possible improvements, not added requirements.
+No positive fusion gain or location-accuracy guarantee is established by this plan.
 
 ## Progress-report checklist
 
@@ -104,7 +108,7 @@ Preserve the supplied report structure and formatting. Use the working report in
 [the report directory](../CENG391_Project_Report_Template/); this cleanup does not
 edit its files.
 
-- Problem/dataset: distinguish the current public fixture from planned participant data.
+- Problem/dataset: distinguish the current fixture and acquired actor media from reviewed, partitioned evaluation data.
 - Methodology: describe the implemented classical pipeline and separate neural preparation.
 - Preliminary results: use the evidence above with dates, denominators and claim limits.
 - Challenges/next steps: include calibration, independent data, neural integration,

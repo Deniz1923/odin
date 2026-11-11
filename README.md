@@ -19,6 +19,7 @@ is `LBPRecognizer`. See the [recognizer contract](docs/ARCHITECTURE.md#enrollmen
 | [Classical walkthrough](docs/CLASSICAL_PIPELINE.md) | Implemented recognition algorithm |
 | [Architecture](docs/ARCHITECTURE.md) | Current components, concurrency and data lifecycle |
 | [Evaluation](docs/EVALUATION.md) | Study splits, calibration, metrics and claim limits |
+| [Datasets and actor study](docs/DATASETS.md) | Reserved benchmarks, actor media sources and appearance-change protocol |
 | [Environment](docs/ENVIRONMENT.md) | Locked stack, neural assets, export and device checks |
 | [Archive](docs/archive/README.md) | Superseded plans and dated preparation results |
 

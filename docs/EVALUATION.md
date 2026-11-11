@@ -6,10 +6,14 @@ are in [project status](PROJECT_STATUS.md); runnable commands are in the
 
 ## Data and separation
 
-Use authorized participant recordings as the primary end-to-end study. Earlier
-planning mentioned approximately 8–10 available volunteers; availability is not a
-completed roster or dataset. Record actual identities, sessions and unique exposure.
-Public fixtures and permitted external media are supplementary and separately reported.
+The study includes public research datasets, our own recordings of team members and
+consenting friends, and public-person photos/videos, especially actors. Controlled
+participant recordings support recognition and unknown-person evaluation as well as
+tracking, alerts and live/runtime checks. Actor media supports appearance-change
+comparisons. ChokePoint and ROF are reserved for later. See [dataset planning](DATASETS.md)
+for acquisition status, held-out appearances and pretrained-data limitations. The
+participant roster and recordings are not yet complete. Report results and exposure
+separately for each source.
 
 Keep enrollment, validation and final-test capture sessions independent. Known people
 may appear in all partitions, but their images/recordings must differ. Final-test

@@ -3,8 +3,9 @@
 Prepared 11 November 2026 for a three-person team. User-supplied milestones:
 **progress report: 27 November 2026; final report: 4 January 2027**. There are
 approximately eight weeks remaining. Earlier dates in supplied/historical documents
-do not override these updates. Submission times and holiday availability are not
-specified here.
+do not override these updates. The user reports no major unavailable dates and
+requests dependency-based planning without weekly-hour estimates. Submission times
+were not supplied.
 
 Status: **preliminary working plan**, accepted as a starting point for refinement.
 Dates below are planned, not claims of actual work. Roles A/B/C are provisional
@@ -44,6 +45,30 @@ owners, dates and task status/progress; do not invent missing historical assignm
   failures rather than scheduling a general rewrite of working components.
 - Deliver reproducible configurations/results, final analysis/report and a demo package.
 
+### Added final-product requirements
+
+These three features are planned final-product requirements in the preliminary
+scope, not already implemented or required by 27 November. Location estimation is
+an undecided, unscheduled proposal and is not part of these requirements.
+
+| Feature | Smallest complete version | Acceptance evidence |
+|---|---|---|
+| Ensemble evidence panel | Show each executed method's candidate-specific raw score, score meaning, threshold and acceptance; show disagreement and the combined decision/rule when fusion is available. Label methods not run or unavailable. Reuse saved inference results rather than running models from UI polling. | Inspect an agreeing case, disagreement, unknown rejection and unavailable-method case; displayed evidence matches recorded results |
+| Recognition comparison plots | Export individual/fused comparisons, per-condition outcomes, threshold tradeoffs and event delay alongside misses, with denominators and processing cost | Figures can be regenerated from identified runs; validation threshold plots stay separate from frozen-test results |
+| Event evidence clips | Retain a short bounded interval around a confirmed eligible appearance, starting with a proposed five-second pre-roll and five-second post-roll. Record timestamps/cadence and gaps; expose pending/ready/failed evidence without delaying the durable event | Replay a saved clip; verify bounded memory/disk, retention and identity-linked deletion, including recording failure and incomplete footage |
+
+Event clips add authorized contextual video storage to the existing descriptor-only
+baseline. They do not authorize continuous permanent recording. Use the existing
+configurable event-retention lifecycle, explicit disk/buffer bounds and private
+storage. The selected interval and recorded cadence must be stated; dropped frames
+cannot be presented as a complete full-rate recording. First implement fixed short
+clips rather than an unbounded encounter recorder.
+
+Single-camera image zones and trails are explicitly excluded at the user's request.
+The separate [location-estimation proposal](LOCATION_ESTIMATION_PROPOSAL.md) retains
+its detailed recorded/live design for discussion. The team has not decided to implement
+it: it has no scope commitment, assigned resources, implementation dates or Gantt bars.
+
 ### Provisional final-stage target: FaceNet and ensemble research
 
 The user envisions combining recognition methods for the final project; exact fusion
@@ -63,19 +88,23 @@ promising a better result or making preliminary progress-report claims about it:
    is a valid research outcome. Include a fused live mode only if results and the
    runtime budget justify it.
 
-The 13 December gate freezes what will enter final testing. If fusion is not ready
+The 13 December gate freezes the recognition methods and configuration entering final
+testing. If fusion is not ready
 or supported, report that status/negative evidence and preserve the working individual
 baselines and required evaluation. Discuss any scope change explicitly with the team;
 do not quietly substitute a staged demonstration for the planned experiment.
 
 ### Outside this schedule
 
-Multi-camera/network ingestion, cross-camera tracking, model training/fine-tuning,
-remote accounts, external notifications and a new UI framework are excluded.
-Buffered event-video clips, quality-weighted temporal aggregation, a replacement
-tracker and a vision-process rewrite are deferred unless pilot measurements make one
-necessary and the team explicitly trades time for it. Earlier preferences remain
-documented; they are not all obligations for the remaining eight weeks.
+Location estimation and its recorded/live multi-camera implementation remain undecided
+and unscheduled. Single-camera image zones/trails, calibrated 3D triangulation, exact
+floor coordinates, model training/fine-tuning, remote accounts, external notifications
+and a new UI framework are excluded. No dedicated phone capture app is planned.
+
+Quality-weighted temporal aggregation, a replacement local tracker and process isolation
+remain possible responses to measured failures, not unconditional additional deliverables.
+The detailed location proposal does not authorize adding those components to the current
+implementation backlog.
 
 ## Completed work: historical Gantt rows
 
@@ -103,8 +132,8 @@ application recognizer and comparative study are not.
 | Lead | Main work | Shared/review work |
 |---|---|---|
 | A: recognition | SCRFD/ArcFace integration, FaceNet if retained, calibration and fusion experiments | Explain methodology; review runtime/evaluation results |
-| B: data | Participant coordination, recording protocol, capture sessions, annotation and split manifests | All three participate in recording; A/C review annotations |
-| C: integration/evaluation | Live hardware checks, evaluation runs/tooling, reproducibility and demo packaging | Review integrations; coordinate assembling reports |
+| B: data | Actor-media sourcing/provenance, recordings/annotations, split manifests and comparison plots | All three help collect/review material; A/C review annotations |
+| C: integration/evaluation | Live checks, event clips, evidence panel, reproducibility and demo packaging | Review integrations; coordinate assembling reports |
 
 All three write/review their own technical report sections and agree on conclusions.
 Map roles to actual names before the chart is submitted. Historical owners must come
@@ -125,23 +154,34 @@ from actual contributions, not this proposed future division.
 | R8 | Individual validation; provisional fusion implementation/development fit; threshold selection and configuration freeze | 7–13 December | A+C; B reviews data | R2, R6; fusion also needs R7 |
 | M2 | Freeze methods/configuration and confirm final experiment scope | 13 December | All | R8 |
 | R9 | Held-out individual/fusion comparisons, condition/event results and failure analysis | 14–20 December | A+C; B checks labels | M2 |
-| R10 | Live performance/endurance and failure exercises; targeted fixes and affected reruns | 14–20 December | C; A assists | M2; material recognition changes reopen validation |
-| R11 | Final results, discussion, figures and report drafting/review | 14–27 December | All | R9/R10 results arrive during drafting |
+| R10 | Live performance/endurance and failure exercises, including clips/panel overhead; targeted fixes and affected reruns | 14–20 December | C; A assists | M2, R14/R15; material recognition changes reopen validation |
+| R11 | Final results, discussion, figures and report drafting/review | 14–27 December | All | R9/R10/R16 results arrive during drafting |
 | R12 | Reproduction instructions and demo/package verification | 21–27 December | C; A+B review | R9, R10 |
 | R13 | Corrections, reproduction buffer, PDF checks and final submission preparation | 28 December–3 January | All | R11, R12 |
+| R14 | Bounded event clips, evidence status, playback, retention and deletion checks | 28 November–6 December | C | R4; uses existing events/storage |
+| R15 | Ensemble evidence panel using recorded candidate-specific results | 7–13 December | C; A supplies scores | R7/R8 score outputs; preserve unavailable states |
+| R16 | Reproducible recognition comparison plots; final figures from frozen results | 7–23 December | B; A+C review | R6/R8 for plot preparation; R9/R10 for final data |
 | M3 | Submit final report | 4 January 2027 | All | R13 |
 
 Preparation/writing can overlap experiments, but final conclusions depend on actual
-results. The buffer is for correction and delivery, not a new feature phase. Check
-team availability over the holiday period before treating these dates as commitments.
+results. The buffer is for correction/delivery, not a new feature phase. The user
+has confirmed no major unavailable dates; exact weekly hours are not a planning gate.
+A owns recognition/fusion, B leads the study and plots, and C leads integration and
+product features, with shared testing/report work. These are provisional role
+assignments, not claims of student contributions or guaranteed completion dates.
 
 ## Data and experiment limits to agree at the pilot
 
-A possible recruitment target, if the previously mentioned 8–10 volunteers are
-available, is 4–6 enrolled people and four unknown people. Two unknown people can
-support development/validation and two remain held out for final test. This is a
-proposed target, not a confirmed roster or sufficient evidence for population claims.
-Known identities need separate reference/development/validation/test capture sessions
+The study includes our own recordings of team members and consenting friends,
+public-person media (especially actors), and public research datasets. Controlled
+participant testing remains included for recognition, tracking, alerts and live
+operation; actor media adds appearance-change comparisons. ChokePoint and ROF are
+documented for later in [dataset planning](DATASETS.md). Start with a small actor
+pilot; expand with separate unknown identities and enough independent appearances
+before freezing the experiment. A possible target is 4–6 enrolled actors and four
+unknown actors, two for development/validation and two held out for final test.
+This is not a completed dataset or sufficient evidence for population claims.
+Known identities need separate reference/development/validation/test films or sessions
 if fitting fusion; unknown final-test identities must stay outside all fitting and
 selection. If collection cannot support that separation, simplify the experiment and
 disclose the limitation instead of reusing test data for tuning.
@@ -149,12 +189,13 @@ disclose the limitation instead of reusing test data for tuning.
 Cover each required condition without recording every possible combination.
 Annotate a declared subset of frames plus encounter windows; absent annotations are
 not negative labels. Keep unique recordings and all method configurations identifiable.
-Actual participant/session counts, named owners and availability remain team inputs.
+Actual identity/session counts and named owners remain team inputs. Spatial walks
+and location-estimation experiments are not included unless that proposal is selected.
 
 ## Chart conventions
 
 Use calendar weeks Monday–Sunday from 12 October, with the 4 January deadline shown
-explicitly. Keep H1–H6 as completed historical rows; show R1–R13 as planned rows,
+explicitly. Keep H1–H6 as completed historical rows; show R1–R16 as planned rows,
 marking work ongoing/completed only from actual progress at report submission. M1/M2/M3 are milestones.
 Use a distinct provisional style for FaceNet/fusion until the team settles that scope.
 Task duration, working hours and completion percentage are different quantities.
@@ -194,6 +235,10 @@ gantt
     R7 FaceNet integration - PROVISIONAL - A :r7, 2026-11-28, 9d
     R8 Validation and PROVISIONAL fusion - A+C :r8, 2026-12-07, 7d
     Method and configuration freeze :milestone, m2, 2026-12-13, 0d
+    section Added product features
+    R14 Event evidence clips - C :r14, 2026-11-28, 9d
+    R15 Ensemble evidence panel - C+A :r15, 2026-12-07, 7d
+    R16 Comparison plots and final figures - B :r16, 2026-12-07, 17d
     section Final evaluation and delivery
     R9 Held-out comparisons and analysis - A+C :r9, 2026-12-14, 7d
     R10 Runtime and failure checks - C :r10, 2026-12-14, 7d

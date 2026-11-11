@@ -1,0 +1,1066 @@
+{
+  "schema_version": 1,
+  "purpose": "Unsplit actor appearance pilot; not evaluation ground truth",
+  "assets": [
+    {
+      "actor": "Johnny Depp",
+      "kind": "photo",
+      "query": "Johnny Depp 2009",
+      "title": "File:Johnny Depp (July 2009) 1 (cropped).jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Johnny_Depp_(July_2009)_1_(cropped).jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/1/12/Johnny_Depp_%28July_2009%29_1_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Johnny Depp (July 2009) 1 (cropped).jpg",
+      "acquired_utc": "2026-11-11T18:07:56.865685+00:00",
+      "sha256": "15493bdecd03c767e62e07af40bdda65a7c0029f18c543a2549c1c958c086b92",
+      "bytes": 129629,
+      "width": 557,
+      "height": 738,
+      "commons_original_sha1": "6191b5359bff60c90b3bd015a580bf5159e59525",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2025-10-06 07:27:21",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Johnny Depp (July 2009) 1 (cropped)",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Extracted images|Johnny Depp in 2009|Public Enemies premiere in Paris",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Johnny Depp during the Paris premiere of Public Enemies at the cinema UGC Normandie",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2009-07-02",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "cropped version of <a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/nicogenin/3683166130/\">flickr.com</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/nicogenin/\">nicogenin</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC BY-SA 2.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution-Share Alike 2.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by-sa/2.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-sa-2.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Johnny Depp",
+      "kind": "photo",
+      "query": "Johnny Depp 2020",
+      "title": "File:Johnny Depp 2020.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Johnny_Depp_2020.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/2/21/Johnny_Depp_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Johnny Depp 2020.jpg",
+      "acquired_utc": "2026-11-11T18:07:57.412432+00:00",
+      "sha256": "da7e0490e2101022fd0a5b3b5850aae6e2940323497ce557ad76b8bf6984a3c3",
+      "bytes": 251140,
+      "width": 400,
+      "height": 550,
+      "commons_original_sha1": "2fdb90fd895e6d8c0197a669e258fc143919b9e9",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2024-01-20 04:21:27",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Johnny Depp 2020",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Minamata (Film)|Personality rights warning|Supported by Wikimedia Deutschland|Festivalsommer 2020|Extracted images|Uploaded with LrMediaWiki|Johnny Depp in 2020|2020 Berlin Film Festival/Photo Project|Photo calls of the 2020 Berlin Film Festival|Items with ticket accreditation|Photographs by Harald Krichel|Supported by Wikimedia Deutschland 2020",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Actor <a href=\"https://en.wikipedia.org/wiki/Johnny_Depp\" class=\"extiw\" title=\"en:Johnny Depp\">Johnny Depp</a> at the <a href=\"https://en.wikipedia.org/wiki/Berlinale\" class=\"extiw\" title=\"en:Berlinale\">en:Berlinale</a> 2020",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2020-02-21",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Harald Krichel",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC BY-SA 3.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution-Share Alike 3.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by-sa/3.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "personality",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-sa-3.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Gary Oldman",
+      "kind": "photo",
+      "query": "Gary Oldman 2011",
+      "title": "File:Gary Oldman 2011 Venice Film Festival.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Gary_Oldman_2011_Venice_Film_Festival.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/3/31/Gary_Oldman_2011_Venice_Film_Festival.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Gary Oldman 2011 Venice Film Festival.jpg",
+      "acquired_utc": "2026-11-11T18:07:57.957333+00:00",
+      "sha256": "6d6d1bc5e1bdedae76c6cd96fd3617fc2919a1877a72ca9474e04ae9d6d190f3",
+      "bytes": 312909,
+      "width": 425,
+      "height": 570,
+      "commons_original_sha1": "78d3cf13a47762b924e22b03ae9bb38c7b6ae919",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2021-09-06 02:46:24",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Gary Oldman 2011 Venice Film Festival",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "2011 Venice Film Festival|Items with VRTS permission confirmed|Extracted images|Gary Oldman in 2011",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "<a href=\"https://en.wikipedia.org/wiki/Gary_Oldman\" class=\"extiw\" title=\"en:Gary Oldman\">Gary Oldman</a> at the <a href=\"https://en.wikipedia.org/wiki/2011_Venice_Film_Festival\" class=\"extiw\" title=\"en:2011 Venice Film Festival\">2011 Venice Film Festival</a>.",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2011-09",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"http://www.andrearaffin.com\">http://www.andrearaffin.com</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"http://www.andrearaffin.com\">Andrea Raffin</a>",
+          "source": "commons-desc-page"
+        },
+        "Permission": {
+          "value": "<p><span class=\"layouttemplateargs\" style=\"display:none;speak:none;\" title=\"template=PermissionTicket 1%3Dhttps%3A%2F%2Fticket.wikimedia.org%2Fotrs%2Findex.pl%3FAction%3DAgentTicketZoom%26TicketNumber%3D2011100710015137 2%3D2011100710015137\"> </span>\n</p>\n<style data-mw-deduplicate=\"TemplateStyles:r1254222110\">.mw-parser-output .messagebox{margin:4px 0;width:auto;border-collapse:collapse;border:2px solid var(--border-color-progressive,#6485d1);background-color:var(--background-color-neutral-subtle,#fbfcff);color:var(--color-base,#202122);box-sizing:border-box;border-inline-start-width:8px}.mw-parser-output .messagebox.mbox-small{font-size:88%;line-height:1.25em}.mw-parser-output .mbox-warning,.mw-parser-output .mbox-speedy{border:2px solid var(--border-color-error,#b22222);background:var(--background-color-error-subtle,#ffdbdb);border-inline-start-width:8px}.mw-parser-output .mbox-serious,.mw-parser-output .mbox-delete,.mw-parser-output .mbox-stop{border:2px solid var(--border-color-error,#b22222);border-inline-start-width:8px}.mw-parser-output .mbox-issue,.mw-parser-output .mbox-content{border:2px solid #f28500;background:var(--background-color-warning-subtle,#ffe);border-inline-start-width:8px}.mw-parser-output .mbox-query,.mw-parser-output .mbox-style{border:2px solid #f4c430;background:var(--background-color-warning-subtle,#ffe);border-inline-start-width:8px}.mw-parser-output .mbox-shit{border:2px solid #960;border-inline-start-width:8px}.mw-parser-output .mbox-license{border:2px solid #88a;border-inline-start-width:initial}.mw-parser-output .mbox-legal{border:2px solid var(--border-color-notice,#666);background:var(--background-color-base,#fff);border-inline-start-width:8px}.mw-parser-output .mbox-honor{border:2px solid #ca3;background:var(--background-color-warning-subtle,#fcf4db);border-inline-start-width:8px}.mw-parser-output .mbox-growth{border:2px solid #8d4;background:var(--background-color-success-subtle,#d5fdf4);border-inline-start-width:8px}.mw-parser-output .mbox-move{border:2px solid #93c;border-inline-start-width:8px}.mw-parser-output .mbox-protection,.mw-parser-output .mbox-message{border:2px solid var(--border-color-base,#aaa);border-inline-start-width:8px}.mw-parser-output .messagebox .mbox-text{border:none;padding:0.25em 0.9em;width:100%}.mw-parser-output .messagebox .mbox-image{border:none;padding-top:2px;padding-bottom:2px;padding-inline-start:0.9em;padding-inline-end:0;text-align:center}.mw-parser-output .messagebox .mbox-imageright{border:none;padding-top:2px;padding-bottom:2px;padding-inline-start:0;padding-inline-end:0.9em;text-align:center}.mw-parser-output .messagebox .mbox-empty-cell{border:none;padding:0;width:1px}.mw-parser-output .messagebox .mbox-invalid-type{text-align:center}@media(min-width:720px){.mw-parser-output .messagebox{margin:4px 10%}.mw-parser-output .messagebox.mbox-small{clear:right;float:right;margin:4px 0 4px 1em;width:238px}}body.skin--responsive .mw-parser-output table.messagebox img{max-width:none!important}</style><table class=\"plainlinks messagebox mbox-notice layouttemplate\" role=\"presentation\" style=\"margin:0.3em 0;width:100%;\"><tbody><tr><td class=\"mbox-image\"><span typeof=\"mw:File\"><span title=\"VRT Wikimedia\"><img alt=\"VRT Wikimedia\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Permission_logo_2021.svg/120px-Permission_logo_2021.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"75\" height=\"48\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Permission_logo_2021.svg/250px-Permission_logo_2021.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"935\" data-file-height=\"600\"></span></span></td><td class=\"mbox-text\">This work is <a href=\"https://freedomdefined.org/Definition\" class=\"extiw\" title=\"freedomdefined:Definition\">free</a> and may be used by anyone for any purpose. If you wish to <b><a href=\"//commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia\" title=\"Commons:Reusing content outside Wikimedia\">use this content</a></b>, you do not need to request permission as long as you follow any licensing requirements mentioned on this page.\n<p>The Wikimedia Foundation has received an e-mail confirming that the copyright holder has approved publication under the terms mentioned on this page. This correspondence has been <strong style=\"color: var(--color-content-added, darkgreen);\">reviewed</strong> by a <a href=\"//commons.wikimedia.org/wiki/Template:PermissionTicket/Users\" title=\"Template:PermissionTicket/Users\">Volunteer Response Team (VRT) member</a> and stored in our <a href=\"//commons.wikimedia.org/wiki/Commons:Volunteer_Response_Team\" title=\"Commons:Volunteer Response Team\">permission archive</a>. The correspondence is available to trusted volunteers as <b><a href=\"https://ticket.wikimedia.org/otrs/index.pl?Action=AgentTicketZoom&amp;TicketNumber=2011100710015137\" class=\"extiw\" title=\"ticket:2011100710015137\">ticket #2011100710015137</a></b>.\n</p><p><small>If you have questions about the archived correspondence, please use the <a href=\"//commons.wikimedia.org/wiki/Commons:Volunteer_Response_Team/Noticeboard\" title=\"Commons:Volunteer Response Team/Noticeboard\">VRT noticeboard</a>.</small>\n<small>Ticket link: <a class=\"external free\" href=\"https://ticket.wikimedia.org/otrs/index.pl?Action=AgentTicketZoom&amp;TicketNumber=2011100710015137\">https://ticket.wikimedia.org/otrs/index.pl?Action=AgentTicketZoom&amp;TicketNumber=2011100710015137</a></small>\n<br><small>Find other files from the same ticket:</small> <span typeof=\"mw:File\"><a href=\"https://wcqs-beta.wmflabs.org/#%23defaultView%3AImageGrid%09%0ASELECT%20%3Fimage%20%20%20%7B%0A%20%20%3Ffile%20wdt%3AP6305%20%222011100710015137%22%20.%0A%20%20%3Ffile%20schema%3Aurl%20%3Fimage.%0A%7D%20%0A\" title=\"SDC query (SPARQL)\" rel=\"nofollow\"><img alt=\"SDC query (SPARQL)\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Wikimedia_Commons_Query_Service_Logo.svg/20px-Wikimedia_Commons_Query_Service_Logo.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"15\" height=\"20\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Wikimedia_Commons_Query_Service_Logo.svg/40px-Wikimedia_Commons_Query_Service_Logo.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"512\" data-file-height=\"688\"></a></span>\n</p>\n<span id=\"field-otrs\" title=\"https://ticket.wikimedia.org/otrs/index.pl?Action=AgentTicketZoom&amp;TicketNumber=2011100710015137\"></span></td></tr></tbody></table>",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseShortName": {
+          "value": "CC BY-SA 3.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution-Share Alike 3.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Attribution": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"http://www.andrearaffin.com\">Andrea Raffin</a>",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by-sa/3.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-sa-3.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Gary Oldman",
+      "kind": "photo",
+      "query": "Gary Oldman 2017",
+      "title": "File:Gary Oldman in 2017 (36334517524).jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Gary_Oldman_in_2017_(36334517524).jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/4/43/Gary_Oldman_in_2017_%2836334517524%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Gary Oldman in 2017 (36334517524).jpg",
+      "acquired_utc": "2026-11-11T18:07:59.047006+00:00",
+      "sha256": "809cf84edba14f56d78a854d08794c841ac61e63ad4436ef4e151c82aff9ad30",
+      "bytes": 5351993,
+      "width": 2236,
+      "height": 3369,
+      "commons_original_sha1": "a753ccfad4ea1c3049a934c46c70f4f5388479f5",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2020-12-28 20:32:43",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Gary Oldman in 2017 (36334517524)",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Extracted images|2017 portrait photographs of men|Men with beards wearing glasses|Male actors giving autographs|Files from John Bauld Flickr stream|Gary Oldman at the premiere of Darkest Hour, TIFF 2017",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "TIFF 2017 Gary Oldman (1 of 1)-3",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2017-09-11 12:23",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/themollusk/36334517524/\">TIFF 2017 Gary Oldman (1 of 1)-3</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/10584612@N06\">John Bauld</a> from Toronto, Canada",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC BY 2.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution 2.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by/2.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-2.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Tilda Swinton",
+      "kind": "photo",
+      "query": "Tilda Swinton 2009",
+      "title": "File:Tilda Swinton 2009.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Tilda_Swinton_2009.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Tilda_Swinton_2009.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Tilda Swinton 2009.jpg",
+      "acquired_utc": "2026-11-11T18:08:25.309200+00:00",
+      "sha256": "e79a407d1bb3d7cc3b948fc0183456decb2b40cb34f9f075814ab4ff10a0c737",
+      "bytes": 955878,
+      "width": 1000,
+      "height": 1500,
+      "commons_original_sha1": "b4db90ab2c31dadd37f34ff1b48571f4af9d9d77",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2009-09-23 18:20:01",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Tilda Swinton 2009",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Taken with Nikon D300|2009 Venice Film Festival|Images with extracted images|Flickr images reviewed by FlickreviewR|Tilda Swinton in 2009|White female clothing|Photographs by Nicolas Genin|Flickr images missing SDC published in",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Tilda Swinton at 2009 Venice Film Festival",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2009-09-23",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/nicogenin/3889790801/\">https://www.flickr.com/photos/nicogenin/3889790801/</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Nicogenin",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC BY-SA 2.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution-Share Alike 2.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by-sa/2.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-sa-2.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Tilda Swinton",
+      "kind": "photo",
+      "query": "Tilda Swinton 2024",
+      "title": "File:Tilda Swinton 2024 1.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Tilda_Swinton_2024_1.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Tilda_Swinton_2024_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Tilda Swinton 2024 1.jpg",
+      "acquired_utc": "2026-11-11T18:08:28.502338+00:00",
+      "sha256": "d049b4f57df2582087a4c2f547f943c076c9c4fe488f72bfecae0f7b9fe2a5b2",
+      "bytes": 4923311,
+      "width": 3072,
+      "height": 4080,
+      "commons_original_sha1": "8c414aac953abb6090afba89d4ea053e4a44fe26",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2025-02-25 20:34:09",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Tilda Swinton 2024 1",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "CC-Zero|Self-published work|Tilda Swinton in 2024|Pathé Palace (Paris)",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Tilda Swinton arrivant à l'avant-première de \"La Chambre d'à côté\", le 16 décembre 2024.",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2024-12-16 19:35:09",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a href=\"//commons.wikimedia.org/wiki/User:ManoSolo13241324\" title=\"User:ManoSolo13241324\">ManoSolo13241324</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Keanu Reeves",
+      "kind": "photo",
+      "query": "Keanu Reeves 2006",
+      "title": "File:KeanuReevesLakehouse.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:KeanuReevesLakehouse.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/65/KeanuReevesLakehouse.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/KeanuReevesLakehouse.jpg",
+      "acquired_utc": "2026-11-11T18:08:31.035289+00:00",
+      "sha256": "8664e66067c5cfa7b45eb53cbac843e91a221c64c25f0b4fb117410e9adc8425",
+      "bytes": 220067,
+      "width": 478,
+      "height": 741,
+      "commons_original_sha1": "6d5b36b5d90bad786a7cae517a8409b4aa22c3d8",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2013-01-01 12:54:43",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "KeanuReevesLakehouse",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "GFDL|Taken with Canon EOS 300D|License migration redundant|Self-published work|Items with VRTS permission confirmed|Keanu Reeves in 2006|Images uploaded by User:Nehrams2020",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "<a href=\"//commons.wikimedia.org/wiki/Keanu_Reeves\" class=\"mw-redirect\" title=\"Keanu Reeves\">Keanu Reeves</a> at <i>The Lake House</i> London premiere",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2006-09",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/caroline_bonarde/503064940/in/set-72157594501080666/\">https://www.flickr.com/photos/caroline_bonarde/503064940/in/set-72157594501080666/</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Caroline Bonarde Ucci at <a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/caroline_bonarde/\">https://www.flickr.com/photos/caroline_bonarde/</a>",
+          "source": "commons-desc-page"
+        },
+        "Permission": {
+          "value": "GNU Free Documentation License, see talk page for author's image permission",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseShortName": {
+          "value": "CC BY 3.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution 3.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Attribution": {
+          "value": "Caroline Bonarde Ucci",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by/3.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-3.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Keanu Reeves",
+      "kind": "photo",
+      "query": "Keanu Reeves 2024",
+      "title": "File:Keanu Reeves SDCC 2024 11.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Keanu_Reeves_SDCC_2024_11.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Keanu_Reeves_SDCC_2024_11.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Keanu Reeves SDCC 2024 11.jpg",
+      "acquired_utc": "2026-11-11T18:08:33.791156+00:00",
+      "sha256": "fa50abc8a4216ebf070b170f13b77436a81997764b4412d01111371c075ddb7b",
+      "bytes": 408868,
+      "width": 1882,
+      "height": 1256,
+      "commons_original_sha1": "a402c508a9b8dbf217a5825893caf8113a292ad1",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2025-02-02 00:18:24",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Keanu Reeves SDCC 2024 11",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Flickr images reviewed by FlickreviewR 2|Keanu Reeves in 2024",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Canadian actor and musician <a href=\"https://en.wikipedia.org/wiki/Keanu_Reeves\" class=\"extiw\" title=\"en:Keanu Reeves\">Keanu Reeves</a> receiving the Inkpot Award at the 2024 <a href=\"https://en.wikipedia.org/wiki/San_Diego_Comic-Con\" class=\"extiw\" title=\"en:San Diego Comic-Con\">San Diego Comic-Con</a>",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2024-07-27 15:27:01",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/chrisroth1/54261521260/\">https://www.flickr.com/photos/chrisroth1/54261521260/</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Chris Roth",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC BY-SA 2.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution-Share Alike 2.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by-sa/2.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-sa-2.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Henry Rollins",
+      "kind": "photo",
+      "query": "Henry Rollins 2003",
+      "title": "File:Henry Rollins in Iraq with USO tour.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Henry_Rollins_in_Iraq_with_USO_tour.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Henry_Rollins_in_Iraq_with_USO_tour.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Henry Rollins in Iraq with USO tour.jpg",
+      "acquired_utc": "2026-11-11T18:08:46.635304+00:00",
+      "sha256": "58d6dcaf8ea0e506a06af1c45de44678175ce198183cf6655a2072098a815381",
+      "bytes": 212247,
+      "width": 924,
+      "height": 653,
+      "commons_original_sha1": "946a006034979ff1ca06cd5167e0605893c22161",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2007-11-23 18:55:20",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Henry Rollins in Iraq with USO tour",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Taken with Nikon D1X|PD US Air Force|Images with extracted images|Vocalists with guitars|United Service Organizations in 2003|Henry Rollins in 2003|Armed Forces Entertainment",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"http://www.dodmedia.osd.mil/\">http://www.dodmedia.osd.mil/</a> \n<p>From the Depart of Defense image search website - <i>Defense Visual Information Center</i>.  Picture comes up if you search for <b>Henry Rollins</b> \n</p><p>ID: DFSD0601876 \n</p><p>Service Depicted: Air Force  \n</p><p>Command Shown: USAFE\n</p><p>031207F6449C002\n</p><p>Henry Rollins, Actor and Musician, signs a guitar at a base dining facility for avid fan US Air Force (USAF) Airman First Class (A1C) Catherine Shultz, Civil Engineer Readiness Troop, 379th Expeditionary Civil Engineering Squadron (ECES). Mr. Rollins is one of the many celebrities donating their time and effort to the United Services Organization (USO)/Armed Forces Entertainment tour in support of deployed US military troops.\n</p>\n<a href=\"https://en.wikipedia.org/wiki/Category:United_States_Air_Force_images\" class=\"extiw\" title=\"en:Category:United States Air Force images\">en:Category:United States Air Force images</a>",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2003-12-07",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"http://www.dodmedia.osd.mil/Assets/Still/2006/Air_Force/DF-SD-06-01876.JPEG\">http://www.dodmedia.osd.mil/Assets/Still/2006/Air_Force/DF-SD-06-01876.JPEG</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "SRA LAKISHA CROLEY, USAF",
+          "source": "commons-desc-page"
+        },
+        "Permission": {
+          "value": "<i>This image or file is a work of a <a href=\"//commons.wikimedia.org/wiki/United_States_Air_Force\" title=\"United States Air Force\">U.S. Air Force</a> Airman or employee, taken or made as part of that person's official duties. As a <a href=\"https://en.wikipedia.org/wiki/Work_of_the_United_States_Government\" class=\"extiw\" title=\"en:Work of the United States Government\">work</a> of the <a href=\"https://en.wikipedia.org/wiki/Federal_Government_of_the_United_States\" class=\"extiw\" title=\"en:Federal Government of the United States\">U.S. federal government</a>, the image or file is in the <b><a href=\"https://en.wikipedia.org/wiki/public_domain\" class=\"extiw\" title=\"en:public domain\">public domain</a></b> in the United States.</i>",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseShortName": {
+          "value": "Public domain",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Public domain",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Copyrighted": {
+          "value": "False",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "pd",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Henry Rollins",
+      "kind": "photo",
+      "query": "Henry Rollins 2013",
+      "title": "File:Henry Rollins at Roskilde Festival 2013.jpg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Henry_Rollins_at_Roskilde_Festival_2013.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Henry_Rollins_at_Roskilde_Festival_2013.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Henry Rollins at Roskilde Festival 2013.jpg",
+      "acquired_utc": "2026-11-11T18:08:49.776695+00:00",
+      "sha256": "f252661c6a2df4bbfe36a29333b32810f2a4f2fb7e173023f9e3b9dcc06a6944",
+      "bytes": 5767423,
+      "width": 3702,
+      "height": 2923,
+      "commons_original_sha1": "74b1b938cc146a89ac6d0c9bf13a48bc90f8e8c3",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2020-03-12 05:54:50",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Henry Rollins at Roskilde Festival 2013",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Flickr images reviewed by FlickreviewR 2|Henry Rollins in 2013",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Henry Rollins spoken word at Roskilde Festival 2013",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "2013-07-06 12:07:27",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/mortenofdenmark/9238574133/\">https://www.flickr.com/photos/mortenofdenmark/9238574133/</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Morten Jensen",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC BY 2.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution 2.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by/2.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-2.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    },
+    {
+      "actor": "Henry Rollins",
+      "kind": "video",
+      "query": "File:Henry Rollins - SXSW In Conversation, 2015.webm",
+      "title": "File:Henry Rollins - SXSW In Conversation, 2015.webm",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Henry_Rollins_-_SXSW_In_Conversation,_2015.webm",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/9/90/Henry_Rollins_-_SXSW_In_Conversation%2C_2015.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "local_path": "data/datasets/actor_pilot/Henry Rollins - SXSW In Conversation, 2015.webm",
+      "acquired_utc": "2026-11-11T18:09:23.542904+00:00",
+      "sha256": "bb679b64b9bb0e22bd902a92ca662ee0aa2c76c84ce76e6e989016a824410a61",
+      "bytes": 230921562,
+      "width": 1280,
+      "height": 720,
+      "commons_original_sha1": "9fb097751a3e082c45548d64f03809c3f63a0831",
+      "source_metadata": {
+        "DateTime": {
+          "value": "2025-10-05 23:59:06",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+        },
+        "ObjectName": {
+          "value": "Henry Rollins - SXSW In Conversation, 2015",
+          "source": "mediawiki-metadata"
+        },
+        "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+        },
+        "Categories": {
+          "value": "Media from YouTube|WebM videos|Taken on missing SDC inception|Uploaded with video2commons|South by Southwest 2015|Video display resolution 1280 x 720|Videos of 2015 from the United States|Videos taken on 2015-03-17|Henry Rollins in 2015|Interview videos from the United States|YouTube files uploaded by Franco Brignone|Videos of Henry Rollins",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "<a href=\"https://en.wikipedia.org/wiki/Henry_Rollins\" class=\"extiw\" title=\"en:Henry Rollins\">Henry Rollins</a> being interviewed by <i><a href=\"https://en.wikipedia.org/wiki/IndieWire\" class=\"extiw\" title=\"en:IndieWire\">IndieWire</a></i> editor-in-chief Dana Harris-Bridson, in promotion of the 2015 horror film that marked his first leading role, <i><a href=\"https://en.wikipedia.org/wiki/He_Never_Died\" class=\"extiw\" title=\"en:He Never Died\">He Never Died</a></i>, which was set to premiere at <a href=\"https://en.wikipedia.org/wiki/South_by_Southwest\" class=\"extiw\" title=\"en:South by Southwest\">SXSW</a>. The interview took place on March 17, the final day of the SXSW Film Conference at the <a href=\"https://en.wikipedia.org/wiki/Austin_Convention_Center\" class=\"extiw\" title=\"en:Austin Convention Center\">Austin Convention Center</a> in <a href=\"https://en.wikipedia.org/wiki/Austin,_Texas\" class=\"extiw\" title=\"en:Austin, Texas\">Austin</a>, <a href=\"https://en.wikipedia.org/wiki/Texas\" class=\"extiw\" title=\"en:Texas\">Texas</a>.",
+          "source": "commons-desc-page"
+        },
+        "DateTimeOriginal": {
+          "value": "Upload date:  18 March 2015; Taken on 17 March 2015",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<bdi lang=\"en\" dir=\"ltr\"><a href=\"//commons.wikimedia.org/wiki/Commons:YouTube_files\" title=\"Commons:YouTube files\">YouTube</a>: <a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/watch?v=WfsywqndOd4\"><bdi lang=\"\">SXSWFilm Catching up with Henry Rollins ACTOR Henry Rollins MP4</bdi></a> – View/save archived versions on <a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/*/https://www.youtube.com/watch?v=WfsywqndOd4\">archive.org</a></bdi>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/@reeldealmovies\">jim fouratt's REEL DEAL : MOVIES THAT MATTER</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC BY 3.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Attribution 3.0",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Attribution": {
+          "value": "jim fouratt's REEL DEAL : MOVIES THAT MATTER",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by/3.0",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc-by-3.0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "transformations": [],
+      "partition": "unassigned",
+      "annotation_status": "pending visual and face-box review",
+      "pretraining_overlap": "unverified"
+    }
+  ]
+}
