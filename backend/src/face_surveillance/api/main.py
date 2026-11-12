@@ -1,4 +1,8 @@
-"""Local operator API; run one uvicorn worker bound to loopback."""
+"""Local operator API; run one uvicorn worker bound to loopback.
+
+`ODIN_METHOD` selects lbp (default), scrfd-lbp or arcface; `ODIN_DEVICE` selects auto (default),
+cuda or cpu for neural models. Each method defaults to its own data directory.
+"""
 
 import asyncio
 import hashlib
@@ -18,6 +22,7 @@ from face_surveillance.api.limits import BodyLimitMiddleware
 from face_surveillance.classical.detection import ROOT
 from face_surveillance.classical.pipeline import Policy
 from face_surveillance.classical.service import Service
+from face_surveillance.methods import build, default_data_dir
 
 
 class CameraRequest(BaseModel):
@@ -39,10 +44,14 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(app):
+        method = os.environ.get("ODIN_METHOD", "lbp")
+        components = (detector, recognizer)
+        if detector is None and recognizer is None:
+            components = build(method, os.environ.get("ODIN_DEVICE", "auto"))
         app.state.service = Service(
-            data_dir or Path(os.environ.get("ODIN_DATA_DIR", ROOT / "data/classical")),
-            detector=detector,
-            recognizer=recognizer,
+            data_dir or Path(os.environ.get("ODIN_DATA_DIR", default_data_dir(method))),
+            detector=components[0],
+            recognizer=components[1],
         )
         try:
             yield

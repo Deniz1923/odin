@@ -165,10 +165,25 @@ Frontend layout: `api.ts` (requests/token), `types.ts`, `useOperatorData.ts` (po
 `pages/` (Monitor, Gallery, Events) and `components/` (preview, controls, runtime,
 track table, evidence panel, settings form).
 
-## Neural preparation boundary
+## Neural methods in the application
 
-The `vision/` modules prepare and verify SCRFD/ArcFace/FaceNet; they are not called
-by the classical application. The [environment guide](ENVIRONMENT.md) owns model
+`face_surveillance.methods.build` composes the named methods `lbp` (Haar + LBP),
+`scrfd-lbp` and `arcface` for the API (`ODIN_METHOD`), evaluation CLI and smoke script.
+`neural/runtime.py` verifies only the SCRFD/ArcFace hashes from `configs/onnx_models.json`
+(not the FaceNet export) and creates sessions on CUDA with CPU fallback disabled, or on
+CPU; `auto` uses CUDA only if every session succeeds. The device is shown in names.
+
+`SCRFDDetector` returns clipped `[x, y, w, h]` boxes, scores and five landmarks from the
+pinned 640x640 profile (default score threshold 0.5). `ArcFaceRecognizer` requires
+landmarks and a face of at least 40 px, aligns with InsightFace `norm_crop` to 112 px,
+and L2-normalizes the 512-value embedding. Matching uses each person's best cosine
+similarity with threshold and distinct-person margin; defaults 0.40/0.05 are
+uncalibrated. Its descriptor space includes the weight hash, so ArcFace templates can
+never load into an LBP gallery. ArcFace applies no exposure/blur gate; its only
+quality rules are the size and landmark checks.
+
+The `vision/` modules prepare and verify SCRFD/ArcFace/FaceNet for export and device
+checks; the application does not call them. The [environment guide](ENVIRONMENT.md) owns model
 acquisition, export, preprocessing, device checks and provenance. Integrating a neural
 recognizer requires its own gallery space and calibrated matching policy while
 reusing the now-injected source/operator/evaluation infrastructure. A signed-vector,

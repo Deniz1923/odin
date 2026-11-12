@@ -41,3 +41,48 @@ def test_lbp_rejects_invalid_images(bad):
 
     with pytest.raises(ValueError):
         lbp_codes(bad)
+
+
+OFFSETS = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1)]
+
+
+def naive_codes(gray):
+    """Deliberately slow per-pixel reference for the documented bit order and >= rule."""
+    height, width = gray.shape
+    codes = np.zeros((height - 2, width - 2), dtype=np.uint8)
+    for y in range(1, height - 1):
+        for x in range(1, width - 1):
+            for bit, (dy, dx) in enumerate(OFFSETS):
+                if gray[y + dy, x + dx] >= gray[y, x]:
+                    codes[y - 1, x - 1] |= 1 << bit
+    return codes
+
+
+@pytest.mark.parametrize("levels", [2, 4, 256])
+def test_lbp_codes_match_naive_reference_including_ties(levels):
+    from face_surveillance.classical.lbp import lbp_codes
+
+    rng = np.random.default_rng(levels)
+    for shape in [(3, 3), (5, 7), (31, 17)]:
+        gray = rng.integers(0, levels, shape).astype(np.uint8)
+        assert np.array_equal(lbp_codes(gray), naive_codes(gray))
+
+
+def test_full_size_descriptor_layout_and_distance_properties():
+    from face_surveillance.classical.lbp import describe, distance, lbp_codes
+
+    rng = np.random.default_rng(0)
+    gray = rng.integers(0, 256, (128, 128)).astype(np.uint8)
+    descriptor = describe(gray)
+    assert descriptor.shape == (16384,) and descriptor.dtype == np.float32
+    cells = descriptor.reshape(64, 256)
+    np.testing.assert_allclose(cells.sum(axis=1), 1, atol=1e-6)
+    # 126 code rows split 16/15: the first cell covers the top-left 16x16 code block.
+    first = np.bincount(lbp_codes(gray)[:16, :16].ravel(), minlength=256) / 256
+    np.testing.assert_allclose(cells[0], first, atol=1e-7)
+    others = [describe(rng.integers(0, 256, (128, 128)).astype(np.uint8)) for _ in range(4)]
+    for a in others:
+        assert distance(a, a) == 0
+        for b in others:
+            assert distance(a, b) == pytest.approx(distance(b, a), abs=1e-6)
+            assert 0 <= distance(a, b) <= 1
