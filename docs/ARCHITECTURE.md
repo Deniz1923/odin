@@ -32,7 +32,7 @@ a separate vision process. One webcam or uploaded replay is active at a time.
 | [LBP](../backend/src/face_surveillance/classical/lbp.py) | Custom descriptors, histogram distance, nearest-person search and rejection |
 | [Pipeline](../backend/src/face_surveillance/classical/pipeline.py) | Calls the injected recognizer, then maintains spatial association, temporal evidence and event proposals |
 | [Store](../backend/src/face_surveillance/classical/storage.py) | SQLite transactions, encrypted templates, event eligibility/cooldown, retention and deletion |
-| [Frontend](../frontend/src/App.tsx) | Monitor, gallery/enrollment, events/export and settings with recognizer-specific score labels/direction |
+| [Frontend](../frontend/src/) | Monitor, gallery/enrollment, events/export and settings with recognizer-specific score labels/direction |
 | [Offline runner](../backend/src/face_surveillance/classical/evaluate.py) | Exhaustive replay, predictions, metrics and validation threshold selection |
 
 ## Enrollment and recognition
@@ -147,11 +147,23 @@ Routes include `/health`, `/api/session`, `/api/status`, `/api/preview`,
 `/api/policy`, `/api/events`, and `/api/events/{id}/ack`. OpenAPI gives methods and
 schemas. The API serves the built frontend when `frontend/dist` exists.
 
-The browser polls every 600 ms, fetches preview separately, revokes old image blobs,
-and invalidates in-flight snapshots on mutations. It labels source failure and stale
-preview. Event export contains the currently fetched history, capped by storage at
-200 events. The UI currently states seven-day retention even if the server's retention
-environment variable has been changed.
+The browser fetches the session token once (refreshing it after a 403), polls status
+and preview every 600 ms, and polls gallery/events every 3 s or immediately after a
+mutation. It revokes old image blobs and invalidates in-flight snapshots on mutations.
+It labels source failure and stale preview. Event export contains the currently fetched
+history, capped by storage at 200 events. Displayed retention comes from `/api/status`.
+
+Status also reports `runtime`: rolling medians over the last 120 processed frames for
+processed/input rate, total processing (median/p95), the wait before processing, and
+stages (detection, preparation+descriptor, matching+tracking, event storage, preview).
+These are operator feedback, not benchmarks. Each track carries `methods`, one evidence
+entry per executed recognizer (currently only the active one), and status lists the
+configured `methods` with `decision_rule: single_method`. The UI's evidence panel shows
+these per track; with one recognizer it cannot show disagreement or fusion yet.
+
+Frontend layout: `api.ts` (requests/token), `types.ts`, `useOperatorData.ts` (polling),
+`pages/` (Monitor, Gallery, Events) and `components/` (preview, controls, runtime,
+track table, evidence panel, settings form).
 
 ## Neural preparation boundary
 
