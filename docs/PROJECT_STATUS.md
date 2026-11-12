@@ -27,7 +27,7 @@ interface and privacy-aware stored face data.
 | Watchlist matching | Authorized multi-sample enrollment, distance/margin rejection and alert toggle | Independent known/unknown validation and thresholds |
 | Tracking | Greedy IoU, ambiguity/conflict resets, missing/expiry behavior | Crossing/occlusion switches and fragmentation measurements |
 | Scored alerts | Temporal confirmation, persisted events, deduplication/cooldown and acknowledgement | Event correctness, misses and delay on real recordings; scores are not probabilities |
-| Two recognition approaches | LBP application; ArcFace and FaceNet execute in preparation utilities | Integrate/evaluate another recognition path under a shared protocol |
+| Two recognition approaches | LBP and SCRFD + ArcFace both run in the application, evaluation runner and smoke test (`--method`); FaceNet only in preparation utilities | Compare LBP and ArcFace on real validation/test recordings with separately calibrated thresholds |
 | Robustness evaluation | Manifest runner, condition counts and validation threshold selection | Independent pose/light/size/occlusion study and frozen comparisons |
 | Operator interface | Monitor, gallery, events/export and settings | Team usability and live-source demonstration |
 | Privacy | Encrypted descriptors, local guards, transient photos/previews, retention and deletion | Verify actual study recordings, exports and backup lifecycle |

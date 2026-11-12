@@ -15,10 +15,15 @@ from skimage import data
 
 from face_surveillance.classical.evaluate import run
 from face_surveillance.classical.service import Service
+from face_surveillance.methods import METHODS, build
+from face_surveillance.neural.runtime import DEVICES
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output", type=Path, required=True)
+parser.add_argument("--method", choices=METHODS, default="lbp")
+parser.add_argument("--device", choices=DEVICES, default="auto")
 args = parser.parse_args()
+detector, recognizer = build(args.method, args.device)
 args.output.mkdir(parents=True, exist_ok=False, mode=0o700)
 rgb = data.astronaut()
 Image.fromarray(rgb).save(args.output / "reference.png")
@@ -54,11 +59,11 @@ manifest = dict(
 )
 path = args.output / "manifest.json"
 path.write_text(json.dumps(manifest, indent=2) + "\n")
-report = run(path, args.output / "evaluation")
+report = run(path, args.output / "evaluation", detector=detector, recognizer=recognizer)
 assert report["videos"][0]["frames"] == 25
 assert report["videos"][0]["event_metrics"]["correct"] == 1
 assert report["videos"][0]["event_metrics"]["duplicates"] == 0
-service = Service(args.output / "private-service")
+service = Service(args.output / "private-service", detector=detector, recognizer=recognizer)
 try:
     service.enroll("Public fixture", [(args.output / "reference.png").read_bytes()], True, True)
     service.start(str(video), "smoke:public-still")
@@ -77,6 +82,8 @@ print(
     json.dumps(
         dict(
             status="passed",
+            detector=detector.name,
+            recognizer=recognizer.name,
             offline_frames=25,
             persisted_events=1,
             deletion_checked=True,
