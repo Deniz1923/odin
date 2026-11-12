@@ -1,5 +1,6 @@
 """Spatial association and time-spaced identity evidence, separate from HTTP/video IO."""
 
+import time
 from collections import deque
 from dataclasses import dataclass, field
 
@@ -49,12 +50,14 @@ class Track:
     evidence: deque = field(default_factory=lambda: deque(maxlen=16))
     last_evidence: float = -float("inf")
     alerted: set = field(default_factory=set)
+    methods: list = field(default_factory=list)
 
     def reset(self, reason):
         self.state, self.person_id, self.reason = "insufficient", None, reason
         self.evidence.clear()
         self.last_evidence = -float("inf")
         self.score = self.margin = None
+        self.methods = []
 
 
 class Pipeline:
@@ -68,11 +71,38 @@ class Pipeline:
         self.last_time = -float("inf")
 
     def process(self, frame: np.ndarray, timestamp: float) -> dict:
+        started = time.perf_counter()
+        found = self.detector.detect(frame)[:32]
+        detected = time.perf_counter()
         detections = []
-        for detection in self.detector.detect(frame)[:32]:
+        for detection in found:
             descriptor, reason = self.recognizer.extract(frame, detection)
             detections.append(dict(**detection, reason=reason, descriptor=descriptor))
-        return self.update(detections, timestamp)
+        extracted = time.perf_counter()
+        result = self.update(detections, timestamp)
+        result["timings"] = dict(
+            detect_ms=(detected - started) * 1000,
+            extract_ms=(extracted - detected) * 1000,
+            match_track_ms=(time.perf_counter() - extracted) * 1000,
+        )
+        return result
+
+    def method_evidence(self, result: dict) -> list[dict]:
+        """Per-recognizer evidence for the latest observation; one entry per executed method."""
+        recognizer = self.recognizer
+        return [
+            dict(
+                method=recognizer.name,
+                score_kind=recognizer.score_kind,
+                higher_is_better=recognizer.higher_is_better,
+                state=result["state"],
+                person_id=result["person_id"],
+                score=result["score"],
+                margin=result["margin"],
+                threshold=self.policy.threshold,
+                required_margin=self.policy.margin,
+            )
+        ]
 
     def update(self, detections: list[dict], timestamp: float) -> dict:
         if not np.isfinite(timestamp) or timestamp < self.last_time:
@@ -130,6 +160,7 @@ class Pipeline:
                 and result["state"] == "candidate"
             ):
                 track.score, track.margin = result["score"], result["margin"]
+                track.methods = self.method_evidence(result)
                 continue
             if result["state"] != "candidate":
                 track.reset(result["state"])
@@ -159,6 +190,7 @@ class Pipeline:
                     )
                     track.alerted.add(identity)
             track.score, track.margin = result["score"], result["margin"]
+            track.methods = self.method_evidence(result)
             track.last_evidence = timestamp
         return dict(
             tracks=[
@@ -176,6 +208,7 @@ class Pipeline:
                     if not np.isfinite(t.last_evidence)
                     else timestamp - t.last_evidence,
                     missing=t.seen < timestamp,
+                    methods=[dict(entry) for entry in t.methods],
                 )
                 for t in self.tracks
             ],

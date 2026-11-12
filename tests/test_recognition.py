@@ -299,3 +299,52 @@ def test_legacy_policy_loads_as_lbp_and_cannot_be_reused_for_another_recognizer(
 def test_shared_policy_still_enforces_lbp_matching_limits(threshold, margin):
     with pytest.raises(ValueError):
         Pipeline({}, set(), Policy(threshold=threshold, margin=margin), recognizer=LBPRecognizer())
+
+
+def test_tracks_carry_per_method_evidence_and_stage_timings():
+    recognizer = SimilarityRecognizer()
+    pipeline = Pipeline(
+        {"A": [np.array([-1.0, 0.0])]},
+        {"A"},
+        Policy(threshold=0.8, margin=0.1),
+        LandmarkDetector(),
+        recognizer=recognizer,
+    )
+    frame = np.full((12, 16, 3), [60, 30, 0], dtype=np.uint8)
+    result = pipeline.process(frame, 0)
+    assert set(result["timings"]) == {"detect_ms", "extract_ms", "match_track_ms"}
+    assert all(value >= 0 for value in result["timings"].values())
+    [entry] = result["tracks"][0]["methods"]
+    assert entry == dict(
+        method="Test similarity",
+        score_kind="cosine_similarity",
+        higher_is_better=True,
+        state="candidate",
+        person_id="A",
+        score=1.0,
+        margin=None,
+        threshold=0.8,
+        required_margin=0.1,
+    )
+    frame[:, :, 2] = 255
+    [entry] = pipeline.process(frame, 0.3)["tracks"][0]["methods"]
+    assert entry["state"] == "unknown" and entry["person_id"] is None
+    frame[:] = 0
+    assert pipeline.process(frame, 0.6)["tracks"][0]["methods"] == [entry]
+    stale = pipeline.process(frame, 1.8)["tracks"][0]
+    assert stale["reason"] == "test_quality_rejection" and stale["methods"] == []
+
+
+def test_runtime_window_summarizes_recent_frames():
+    from face_surveillance.classical.service import RuntimeWindow
+
+    window = RuntimeWindow(size=3)
+    assert window.summary() is None
+    for index in range(4):
+        window.add(index * 0.5, index * 2, 10.0 * (index + 1), dict(detect_ms=float(index)))
+    summary = window.summary()
+    assert summary["window_frames"] == 3
+    assert summary["processed_fps"] == pytest.approx(2.0)
+    assert summary["input_fps"] == pytest.approx(4.0)
+    assert summary["processing_ms_median"] == pytest.approx(30.0)
+    assert summary["stage_ms_median"] == {"detect_ms": 2.0}
