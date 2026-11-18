@@ -39,6 +39,8 @@ select = ["E", "F", "I"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# InsightFace norm_crop uses a scikit-image API deprecated for 2.2; behaviour is unchanged.
+filterwarnings = ["ignore:`estimate` is deprecated:FutureWarning"]
 
 [tool.uv]
 exclude-dependencies = ["onnxruntime", "opencv-python"]

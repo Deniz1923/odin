@@ -1,9 +1,15 @@
 # odin
 
-Local face-recognition research prototype for CENG391. The working baseline uses
-pretrained Haar face detection and **our own NumPy implementation of LBP, spatial
-histograms and chi-square matching**. Existing SCRFD/ArcFace/FaceNet preparation
-tools remain available for later comparisons; they do not run in the classical app.
+Local face-recognition research prototype for CENG391. Three methods run through the
+same pipeline, gallery, operator UI and evaluation runner:
+
+| `ODIN_METHOD` / `--method` | Detector | Recognizer |
+|---|---|---|
+| `lbp` (default) | Haar | **our own NumPy LBP, spatial histograms and chi-square matching** |
+| `scrfd-lbp` | SCRFD-10GF | our LBP, on SCRFD boxes (matched-detector comparison) |
+| `arcface` | SCRFD-10GF | pretrained ArcFace R50 (w600k), five-landmark alignment, cosine similarity |
+
+FaceNet is prepared (ONNX export) but not yet connected to the application.
 
 Detection and recognition are injected into the shared pipeline. Each recognizer
 owns its preprocessing, descriptors and matching settings; the enabled implementation
@@ -38,6 +44,14 @@ uv run --locked python -m uvicorn face_surveillance.api.main:app --host 127.0.0.
 Python dependencies and the editable project are installed by `uv sync --locked`;
 no manual wheel downloads or `PYTHONPATH` override are needed. For a setup check,
 `uv sync --locked --dry-run` should report that it would make no changes.
+
+To run SCRFD + ArcFace instead, acquire the neural models as in
+[the environment guide](docs/ENVIRONMENT.md#acquire-source-assets-for-a-new-neural-bundle)
+(only `det_10g.onnx` and `w600k_r50.onnx` are needed) and start with
+`ODIN_METHOD=arcface`. `ODIN_DEVICE=auto` (default) uses CUDA when every model can run
+on it and otherwise CPU; `cuda` or `cpu` forces one. The sidebar shows the device used.
+Each method keeps its own gallery directory (`data/classical`, `data/scrfd-lbp`,
+`data/arcface`) because descriptors from different methods cannot be compared.
 
 Open **http://127.0.0.1:8000**. Use one Uvicorn worker; no reload while a camera is
 active. The Haar XML is a local asset; acquisition is explicit,
@@ -97,7 +111,14 @@ uv run --locked python -m face_surveillance.classical.evaluate \
 
 uv run --locked python -m face_surveillance.classical.evaluate \
   --manifest experiments/my-test.json --output runs/lbp-test-01
+
+uv run --locked python -m face_surveillance.classical.evaluate --method arcface \
+  --manifest experiments/my-validation.json --output runs/arcface-validation-01 --calibrate
 ```
+
+Calibrate each method separately: LBP distance (lower is closer) and ArcFace cosine
+similarity (higher is closer) are different scales. The manifest's `policy.threshold`
+must suit the method being run.
 
 The calibration command requires `split: validation` and both known and unknown
 usable observations. It selects a distance limit under an empirical unknown
@@ -128,6 +149,7 @@ uv run --locked ruff format --check backend tests scripts
 npm --prefix frontend run lint
 npm --prefix frontend run build
 uv run --locked python scripts/classical_smoke.py --output runs/classical-smoke-new
+uv run --locked python scripts/classical_smoke.py --method arcface --output runs/arcface-smoke-new
 uv run --locked python scripts/check_vision_cpu.py --output runs/cpu-regression-new
 ```
 

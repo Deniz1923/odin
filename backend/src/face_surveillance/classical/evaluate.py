@@ -1,6 +1,7 @@
 """Offline, exhaustive replay and validation-only threshold selection.
 
 Example: python -m face_surveillance.classical.evaluate --manifest study.json --output runs/study-01
+Add `--method arcface` (SCRFD + ArcFace) or `--method scrfd-lbp`; the default is Haar + LBP.
 """
 
 import argparse
@@ -12,6 +13,9 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+
+from face_surveillance.methods import METHODS, build
+from face_surveillance.neural.runtime import DEVICES
 
 from .detection import HaarDetector
 from .pipeline import Pipeline, Policy, overlap
@@ -214,6 +218,7 @@ def run(
         status="running",
         split=manifest["split"],
         model=recognizer.name,
+        detector=detector.name,
         descriptor_space=recognizer.space,
         score_kind=recognizer.score_kind,
         higher_is_better=recognizer.higher_is_better,
@@ -357,9 +362,17 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--calibrate", action="store_true")
     parser.add_argument("--max-unknown-fpir", type=float, default=0.05)
+    parser.add_argument("--method", choices=METHODS, default="lbp")
+    parser.add_argument("--device", choices=DEVICES, default="auto")
     args = parser.parse_args()
+    detector, recognizer = build(args.method, args.device)
     report = run(
-        args.manifest, args.output, calibrate=args.calibrate, max_unknown_fpir=args.max_unknown_fpir
+        args.manifest,
+        args.output,
+        calibrate=args.calibrate,
+        max_unknown_fpir=args.max_unknown_fpir,
+        detector=detector,
+        recognizer=recognizer,
     )
     print(json.dumps({k: report[k] for k in ("status", "metrics", "processing_ms")}, indent=2))
 
