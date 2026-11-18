@@ -315,6 +315,7 @@ def test_tracks_carry_per_method_evidence_and_stage_timings():
     assert set(result["timings"]) == {"detect_ms", "extract_ms", "match_track_ms"}
     assert all(value >= 0 for value in result["timings"].values())
     [entry] = result["tracks"][0]["methods"]
+    assert result["tracks"][0]["methods_current"] is True
     assert entry == dict(
         method="Test similarity",
         score_kind="cosine_similarity",
@@ -326,11 +327,22 @@ def test_tracks_carry_per_method_evidence_and_stage_timings():
         threshold=0.8,
         required_margin=0.1,
     )
+    assert pipeline.process(np.zeros_like(frame), 0.1)["tracks"][0]["reason"] == (
+        "test_quality_rejection"
+    )
+    recovered = pipeline.process(frame, 0.2)["tracks"][0]
+    assert recovered["methods_current"] and recovered["reason"] == "collecting_evidence"
+    assert recovered["observations"] == 1
     frame[:, :, 2] = 255
     [entry] = pipeline.process(frame, 0.3)["tracks"][0]["methods"]
     assert entry["state"] == "unknown" and entry["person_id"] is None
     frame[:] = 0
-    assert pipeline.process(frame, 0.6)["tracks"][0]["methods"] == [entry]
+    skipped = pipeline.process(frame, 0.6)["tracks"][0]
+    assert skipped["methods"] == [entry]
+    assert skipped["methods_current"] is False and not skipped["missing"]
+    missing = pipeline.update([], 0.9)["tracks"][0]
+    assert missing["methods"] == [entry]
+    assert missing["methods_current"] is False and missing["missing"]
     stale = pipeline.process(frame, 1.8)["tracks"][0]
     assert stale["reason"] == "test_quality_rejection" and stale["methods"] == []
 

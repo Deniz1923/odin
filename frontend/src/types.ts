@@ -25,6 +25,7 @@ export type Track = {
   evidence_age: number | null
   missing: boolean
   methods: MethodEvidence[]
+  methods_current: boolean
 }
 
 export type Policy = { threshold: number; margin: number; min_observations: number; min_span: number; [key: string]: number }

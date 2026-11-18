@@ -19,11 +19,11 @@ export function PolicyForm({ status, disabled, onSave }: Props) {
         <form key={`${status.policy.threshold}-${status.policy.margin}`} onSubmit={save}>
           <label>
             {status.higher_is_better ? 'Minimum matching similarity' : 'Maximum matching distance'}
-            <input name="threshold" type="number" min={status.score_range[0]} max={status.score_range[1]} step="0.005" defaultValue={status.policy.threshold} required />
+            <input name="threshold" type="number" min={status.score_range[0]} max={status.score_range[1]} step="any" defaultValue={status.policy.threshold} required />
           </label>
           <label>
             Minimum identity margin
-            <input name="margin" type="number" min="0" max={status.score_range[1] - status.score_range[0]} step="0.005" defaultValue={status.policy.margin} required />
+            <input name="margin" type="number" min="0" max={status.score_range[1] - status.score_range[0]} step="any" defaultValue={status.policy.margin} required />
           </label>
           <button className="secondary" disabled={disabled}>Save settings</button>
         </form>

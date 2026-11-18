@@ -62,6 +62,7 @@ export function useOperatorData(onError: (message: string) => void) {
           return
         }
         const response = await fetch('/api/preview', { cache: 'no-store', signal })
+        if (!active || observedRevision !== revision.current) return
         if (response.status === 200) {
           const blob = await response.blob()
           if (!active || observedRevision !== revision.current) return
@@ -72,7 +73,7 @@ export function useOperatorData(onError: (message: string) => void) {
           throw new Error(`Preview unavailable (${response.status})`)
         }
       } catch (e) {
-        if (active) {
+        if (active && observedRevision === revision.current) {
           setConnected(false)
           reportError.current((e as Error).message)
         }
@@ -99,8 +100,5 @@ export function useOperatorData(onError: (message: string) => void) {
     setStatus(previous => previous ? { ...previous, tracks: [] } : previous)
   }, [replacePreview])
 
-  /** Request fresh gallery/events on the next poll without discarding the current view. */
-  const refreshLists = useCallback(() => { listsDue.current = 0 }, [])
-
-  return { status, people, events, preview, connected, ready, invalidate, refreshLists }
+  return { status, people, events, preview, connected, ready, invalidate }
 }

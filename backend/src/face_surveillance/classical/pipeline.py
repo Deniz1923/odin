@@ -88,7 +88,7 @@ class Pipeline:
         return result
 
     def method_evidence(self, result: dict) -> list[dict]:
-        """Per-recognizer evidence for the latest observation; one entry per executed method."""
+        """Per-recognizer evidence for the last scored observation."""
         recognizer = self.recognizer
         return [
             dict(
@@ -142,6 +142,7 @@ class Pipeline:
                 self.tracks.append(track)
                 assigned.append((track, detection, any(x[2] == j for x in pairs)))
         events = []
+        scored = set()
         for track, detection, ambiguous in assigned:
             track.bbox, track.seen = detection["bbox"], timestamp
             if ambiguous:
@@ -152,6 +153,7 @@ class Pipeline:
                 track.reason = detection["reason"]
                 continue
             result = self.recognizer.match(descriptor, self.gallery, p.threshold, p.margin)
+            scored.add(track.id)
             identity = result["person_id"]
             # Space positive evidence, never checks for contradictory identity evidence.
             if (
@@ -161,6 +163,9 @@ class Pipeline:
             ):
                 track.score, track.margin = result["score"], result["margin"]
                 track.methods = self.method_evidence(result)
+                track.reason = (
+                    "temporal_support" if track.state == "confirmed" else "collecting_evidence"
+                )
                 continue
             if result["state"] != "candidate":
                 track.reset(result["state"])
@@ -209,6 +214,7 @@ class Pipeline:
                     else timestamp - t.last_evidence,
                     missing=t.seen < timestamp,
                     methods=[dict(entry) for entry in t.methods],
+                    methods_current=t.id in scored,
                 )
                 for t in self.tracks
             ],

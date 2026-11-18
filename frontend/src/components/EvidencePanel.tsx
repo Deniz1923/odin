@@ -65,9 +65,12 @@ export function EvidencePanel({ status, trackId, names, onClose }: Props) {
               <div><span>SUPPORTING OBSERVATIONS</span><strong>{track.observations}<small> needed {status?.policy.min_observations}</small></strong></div>
               <div><span>EVIDENCE AGE</span><strong>{track.evidence_age == null ? '—' : `${track.evidence_age.toFixed(2)} s`}</strong></div>
             </div>
-            {disagreement(track.methods) && <p className="message error">Methods disagree on this observation.</p>}
+            {disagreement(track.methods) && <p className="message error">Methods disagree on the last scored observation.</p>}
             <div className="table-wrap">
               <table>
+                {!track.methods_current && track.methods.length > 0 && (
+                  <caption>The latest frame was not scored for this track. Showing the last scored observation.</caption>
+                )}
                 <thead><tr><th>Method</th><th>Accepted identity</th><th>Score vs threshold</th><th>Margin vs required</th><th>Outcome</th></tr></thead>
                 <tbody>
                   {methods.map(method => (
