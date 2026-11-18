@@ -89,6 +89,30 @@ def test_arcface_match_is_cosine_higher_is_better_with_rejection_and_margin():
         recognizer.validate_descriptor(unit(0, size=128))
 
 
+def test_arcface_calibration_accepts_scores_at_both_cosine_bounds():
+    from face_surveillance.classical.evaluate import select_threshold
+
+    recognizer = ArcFaceRecognizer(None, "f" * 64, device="cpu")
+    sample = unit(0)
+    sample[0] = np.nextafter(sample[0], np.float32(2))
+    recognizer.validate_descriptor(sample)
+    gallery = {"a": [sample]}
+    known = recognizer.match(sample, gallery, -1, 0)
+    unknown = recognizer.match(-sample, gallery, -1, 0)
+    result = select_threshold(
+        [
+            dict(score=known["score"], margin=None, known=True, correct=True),
+            dict(score=unknown["score"], margin=None, known=False, correct=False),
+        ],
+        recognizer=recognizer,
+        split="validation",
+        max_unknown_fpir=0,
+    )
+    assert result["threshold"] == 1
+    assert result["known_correct"] == 1 and result["unknown_false_accept"] == 0
+    assert known["score"] == 1 and unknown["score"] == -1
+
+
 def test_service_keeps_arcface_gallery_separate_from_lbp(tmp_path):
     from face_surveillance.classical.service import Service
 

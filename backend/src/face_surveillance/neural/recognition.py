@@ -65,10 +65,10 @@ class ArcFaceRecognizer:
 
     def match(self, descriptor, gallery, threshold, margin) -> dict:
         self.validate_settings(threshold, margin)
-        # Best similarity per person, highest first; ties are ordered by person ID.
+        # Float32 dot products of unit vectors can round beyond the cosine bounds.
         scores = sorted(
             (
-                (float(np.max(np.stack(samples) @ descriptor)), person)
+                (float(np.max(np.stack(samples) @ descriptor).clip(*self.score_range)), person)
                 for person, samples in gallery.items()
                 if len(samples)
             ),
