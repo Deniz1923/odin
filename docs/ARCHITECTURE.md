@@ -159,7 +159,8 @@ stages (detection, preparation+descriptor, matching+tracking, event storage, pre
 These are operator feedback, not benchmarks. Each track carries `methods`, one evidence
 entry per executed recognizer (currently only the active one), and status lists the
 configured `methods` with `decision_rule: single_method`. The UI's evidence panel shows
-these per track; with one recognizer it cannot show disagreement or fusion yet.
+these per track and labels older results when the latest frame was not scored.
+With one recognizer it cannot show disagreement or fusion yet.
 
 Frontend layout: `api.ts` (requests/token), `types.ts`, `useOperatorData.ts` (polling),
 `pages/` (Monitor, Gallery, Events) and `components/` (preview, controls, runtime,

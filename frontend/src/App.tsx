@@ -21,14 +21,14 @@ function App() {
   const [notice, setNotice] = useState('')
   const [busy, setBusy] = useState(false)
   const reportError = useCallback((message: string) => setError(message), [])
-  const { status, people, events, preview, connected, ready, invalidate, refreshLists } = useOperatorData(reportError)
+  const { status, people, events, preview, connected, ready, invalidate } = useOperatorData(reportError)
 
   async function action(work: () => Promise<unknown>, message = '') {
     invalidate()
     setBusy(true); setError(''); setNotice('')
     try { await work(); setNotice(message) }
     catch (e) { setError((e as Error).message) }
-    finally { setBusy(false); refreshLists() }
+    finally { invalidate(); setBusy(false) }
   }
 
   const disabled = busy || !ready
