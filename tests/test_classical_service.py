@@ -44,9 +44,22 @@ def test_recorded_source_finishes_and_deletes_temporary_video(tmp_path):
     deadline = time.monotonic() + 5
     while service.status()["state"] not in ("ended", "failed") and time.monotonic() < deadline:
         time.sleep(0.03)
-    assert service.status()["state"] == "ended"
-    assert service.status()["processed"] == 3
-    assert service.status()["dropped"] == 0
+    status = service.status()
+    assert status["state"] == "ended"
+    assert status["processed"] == 3
+    assert status["dropped"] == 0
+    assert status["retention_days"] == 7
+    assert status["decision_rule"] == "single_method"
+    assert [m["name"] for m in status["methods"]] == [service.recognizer.name]
+    assert status["runtime"]["window_frames"] == 3
+    assert set(status["runtime"]["stage_ms_median"]) == {
+        "detect_ms",
+        "extract_ms",
+        "match_track_ms",
+        "events_ms",
+        "preview_ms",
+        "queue_ms",
+    }
     assert not video.exists()
     assert service.preview() is None
     service.close()

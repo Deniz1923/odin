@@ -9,6 +9,7 @@ import queue
 import threading
 import time
 import uuid
+from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -36,6 +37,40 @@ def decode_image(content: bytes) -> np.ndarray:
     if frame is None:
         raise ValueError("Image cannot be decoded")
     return frame
+
+
+class RuntimeWindow:
+    """Rolling measurements over recently processed frames; operator feedback, not a benchmark."""
+
+    def __init__(self, size: int = 120):
+        self.frames = deque(maxlen=size)
+
+    def add(self, finished: float, captured: int, total_ms: float, stages: dict):
+        self.frames.append((finished, captured, total_ms, stages))
+
+    def summary(self) -> dict | None:
+        if not self.frames:
+            return None
+        totals = np.array([frame[2] for frame in self.frames])
+        span = self.frames[-1][0] - self.frames[0][0]
+        rate = None if len(self.frames) < 2 or span <= 0 else (len(self.frames) - 1) / span
+        input_rate = (
+            None
+            if len(self.frames) < 2 or span <= 0
+            else (self.frames[-1][1] - self.frames[0][1]) / span
+        )
+        stages = {
+            name: float(np.median([frame[3][name] for frame in self.frames]))
+            for name in self.frames[-1][3]
+        }
+        return dict(
+            window_frames=len(self.frames),
+            processed_fps=rate,
+            input_fps=input_rate,
+            processing_ms_median=float(np.median(totals)),
+            processing_ms_p95=float(np.percentile(totals, 95)),
+            stage_ms_median=stages,
+        )
 
 
 class Service:
@@ -207,6 +242,18 @@ class Service:
                 calibrated=False,
                 descriptor_space=self.recognizer.space,
                 recognizer=self.recognizer.name,
+                methods=[
+                    dict(
+                        name=self.recognizer.name,
+                        score_kind=self.recognizer.score_kind,
+                        score_range=self.recognizer.score_range,
+                        higher_is_better=self.recognizer.higher_is_better,
+                        threshold=self.policy.threshold,
+                        margin=self.policy.margin,
+                    )
+                ],
+                decision_rule="single_method",
+                retention_days=self.store.retention_days,
                 score_kind=self.recognizer.score_kind,
                 score_range=self.recognizer.score_range,
                 higher_is_better=self.recognizer.higher_is_better,
@@ -291,6 +338,7 @@ class Service:
         self.capture_worker = capture
         capture.start()
         last_received = time.monotonic()
+        runtime = RuntimeWindow()
         try:
             while not stop.is_set():
                 try:
@@ -313,8 +361,10 @@ class Service:
                         self.jpeg = None
                         return
                     last_received = received
+                    queue_ms = (time.monotonic() - received) * 1000
                     started = time.perf_counter()
                     result = self.pipeline.process(value, stamp)
+                    events_started = time.perf_counter()
                     for event in result["events"]:
                         self.store.add_event(
                             source=self.snapshot["source"],
@@ -329,6 +379,7 @@ class Service:
                             cooldown=self.policy.cooldown,
                             **event,
                         )
+                    preview_started = time.perf_counter()
                     for track in result["tracks"]:
                         track["name"] = self.names.get(track["person_id"])
                         if not track["missing"]:
@@ -352,12 +403,26 @@ class Service:
                     ok, encoded = cv2.imencode(".jpg", preview, [cv2.IMWRITE_JPEG_QUALITY, 75])
                     self.jpeg = encoded.tobytes() if ok else None
                     self.last_frame_at = received
+                    finished = time.perf_counter()
+                    total_ms = (finished - started) * 1000
+                    runtime.add(
+                        time.monotonic(),
+                        counts["captured"],
+                        total_ms,
+                        dict(
+                            **result["timings"],
+                            events_ms=(preview_started - events_started) * 1000,
+                            preview_ms=(finished - preview_started) * 1000,
+                            queue_ms=queue_ms,
+                        ),
+                    )
                     self.snapshot.update(
                         state="running",
                         tracks=result["tracks"],
                         processed=self.snapshot["processed"] + 1,
                         media_time=stamp,
-                        processing_ms=(time.perf_counter() - started) * 1000,
+                        processing_ms=total_ms,
+                        runtime=runtime.summary(),
                         **counts,
                     )
         except Exception as exc:
